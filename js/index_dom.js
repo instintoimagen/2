@@ -6,6 +6,7 @@ import scrollTopButton from "./dom/boton_scroll.js";
 import darkTheme from "./dom/tema_oscuro.js";
 import responsiveMedia from "./dom/objeto_responsive.js"; */
 import responsiveTester from "./dom/prueba_responsive.js";
+import userDeviceInfo from "./dom/deteccion_dispositivos.js";
 
 //   El evento del botón del menu hamburguesa, y los otros eventos (reloj, contador, etc) los invocamos, o sea, lo cargamos en el DOMContentListener que es más eficiente que en el window.load
 document.addEventListener("DOMContentLoaded", (e) => {
@@ -31,6 +32,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
     `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d54252.30373386871!2d-64.97041811207026!3d-31.804045394317505!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x942d2ef9d0783977%3A0xd9764e49db56f5e0!2sMuseo%20Rocsen!5e0!3m2!1ses!2sar!4v1644448137038!5m2!1ses!2sar" width="800" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`
   ); */
   responsiveTester("responsive-tester");
+  userDeviceInfo("user-device");
 });
 // Fuera del DOMContentLoaded porque en tema_oscuro.js utilizamos otro DOMContentLoaded, y no puede haber uno dentro de otro. Se reemplazarían y uno no funcionaría.
 // En la función darkTheme: 1-Definimos selector (botón), 2-La clase que va a activar el tema oscuro en los elementos que vamos a hacer dark, agregando o quitando de la lista de clases, No lleva punto.
