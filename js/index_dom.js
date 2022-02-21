@@ -7,6 +7,7 @@ import darkTheme from "./dom/tema_oscuro.js";
 import responsiveMedia from "./dom/objeto_responsive.js"; */
 import responsiveTester from "./dom/prueba_responsive.js";
 import userDeviceInfo from "./dom/deteccion_dispositivos.js";
+import networkStatus from "./dom/deteccion_red.js";
 
 //   El evento del botón del menu hamburguesa, y los otros eventos (reloj, contador, etc) los invocamos, o sea, lo cargamos en el DOMContentListener que es más eficiente que en el window.load
 document.addEventListener("DOMContentLoaded", (e) => {
@@ -37,6 +38,9 @@ document.addEventListener("DOMContentLoaded", (e) => {
 // Fuera del DOMContentLoaded porque en tema_oscuro.js utilizamos otro DOMContentLoaded, y no puede haber uno dentro de otro. Se reemplazarían y uno no funcionaría.
 // En la función darkTheme: 1-Definimos selector (botón), 2-La clase que va a activar el tema oscuro en los elementos que vamos a hacer dark, agregando o quitando de la lista de clases, No lleva punto.
 /* darkTheme(".dark-theme-btn", "dark-mode"); */
+
+// No necesita estar dentro del DOMContentLoaded, ya que se ejecutará cuando el navegador detecte desconexión de la red. No requiere ningún parámetro.
+networkStatus();
 
 // Eventos del Teclado: 1- keydown se ejecuta cuando presionamos una tecla. 2- keyup se ejecuta cuando soltamos una tecla presionada. 3- keypress se estará ejecutando mientras mantengamos presionada la tecla.
 /* document.addEventListener("keydown", (e) => {
