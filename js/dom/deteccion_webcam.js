@@ -11,7 +11,7 @@ export default function webCam(id) {
       })
       .catch((err) => {
         $video.insertAdjacentHTML("afterend", `<p> <mark> ${err} </mark></p>`);
-        console.log(`Sucedió el siguiente errorilijillo:  ${err}`);
+        //console.log(`Sucedió el siguiente errorilijillo:  ${err}`);
       });
   }
 }

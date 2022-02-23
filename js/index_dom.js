@@ -1,4 +1,5 @@
-/* import hamburguerMenu from "./dom/menu_hamburguesa.js";
+import hamburguerMenu from "./dom/menu_hamburguesa.js";
+/*
 import { digitalClock, alarm } from "./dom/reloj.js";
 import { moveBall, shortCuts } from "./dom/teclado.js";
 import countdown from "./dom/cuenta_regresiva.js";
@@ -9,12 +10,14 @@ import responsiveTester from "./dom/prueba_responsive.js";
 import userDeviceInfo from "./dom/deteccion_dispositivos.js";
 import networkStatus from "./dom/deteccion_red.js";
 import webCam from "./dom/deteccion_webcam.js";
+import getGeolocation from "./dom/geolocalizacion.js";
 
-//   El evento del botón del menu hamburguesa, y los otros eventos (reloj, contador, etc) los invocamos, o sea, lo cargamos en el DOMContentListener que es más eficiente que en el window.load
 document.addEventListener("DOMContentLoaded", (e) => {
+  //   El evento del botón del menu hamburguesa, y los otros eventos (reloj, contador, etc) los invocamos, o sea, lo cargamos en el DOMContentListener que es más eficiente que en el window.load
   // 1-Definimos el selector, el botón está definido por una clase entonces lleva punto. 2-El evento despliega el panel. 3-tocar un link del menu cierra panel.
-  /* hamburguerMenu(".panel-btn", ".panel", ".menu a");
-  digitalClock("#reloj", "#activar-reloj", "#desactivar-reloj");
+  hamburguerMenu(".panel-btn", ".panel", ".menu a");
+  /* 
+ digitalClock("#reloj", "#activar-reloj", "#desactivar-reloj");
   alarm("assets/alarma.mp3", "#activar-alarma", "#desactivar-alarma");
   countdown("countdown", "Mar 12, 2022 16:30:00", "Feliz Cumple Coco 👦");
   // Definimos el selector (botón), lleva punto por ser clase
@@ -36,6 +39,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
   responsiveTester("responsive-tester");
   userDeviceInfo("user-device");
   webCam("webcam");
+  getGeolocation("geolocation");
 });
 // Fuera del DOMContentLoaded porque en tema_oscuro.js utilizamos otro DOMContentLoaded, y no puede haber uno dentro de otro. Se reemplazarían y uno no funcionaría.
 // En la función darkTheme: 1-Definimos selector (botón), 2-La clase que va a activar el tema oscuro en los elementos que vamos a hacer dark, agregando o quitando de la lista de clases, No lleva punto.

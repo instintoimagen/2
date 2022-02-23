@@ -32,6 +32,10 @@ img {
   height: auto;
 }
 
+section ul {
+  list-style-type: none;
+}
+
 /* ++++   menu-hamburguesa  ++++ */
 
 .header {
@@ -74,6 +78,8 @@ img {
   left: 0;
   right: 0;
   width: 100%;
+  /* Overflow: Para hacer que el contenido, los link del menú que desbordan, se pueda escrolear */
+  overflow-y: auto;
   background-color: var(--second-modal-color);
   opacity: 0;
   transition: transform 0.3s ease, opacity 0.3s ease;
@@ -122,7 +128,7 @@ img {
   padding: 2rem;
   width: inherit;
   display: block;
-  font-size: 1.25rem;
+  font-size: 2rem;
   text-decoration: none;
   color: var(--main-color);
   transition: all 0.3s ease;
