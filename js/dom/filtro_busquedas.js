@@ -1,11 +1,12 @@
 export default function searchFilters(input, selector) {
-  document.addEventListener("keyup", (e) => {
+  // Escuchamos el evento "input" para que al hacer click en la cruz (del campo de entrada) vuelva a poner todas las tarjetas. JonMircha usó el "keyup", pero éste no vuelve las tarjetas al borrar con la cruz, solo las devuelve al borrar con la tecla blackspace del teclado.
+  document.addEventListener("input", (e) => {
     // El if de abrajo es así: si el selector (card) coincide con lo que está en la variable input (lo que escribe el usuario) entonces ejecuta el código entre llaves:
     if (e.target.matches(input)) {
       //console.log(e.target.value) con e.target.value me muestra el valor sumado, o sea palabra y no letras separadas. Necesitamos que busque esa palabra en los selectores
 
       //Quiero que busques en todos los selectores (tarjetas con clase card). Usando un método forEach, por cada selector, que busque el texto que está en input
-      console.log(e.target.value);
+      console.log(e.target.value); //este console.log me mostrará en consola si está funcionando el input y qué está registrando (sumado)
 
       document.querySelectorAll(selector).forEach(
         (el) =>

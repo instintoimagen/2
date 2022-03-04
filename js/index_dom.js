@@ -41,6 +41,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
   userDeviceInfo("user-device");
   webCam("webcam");
   getGeolocation("geolocation");
+  // Para filtros necesita: 1-el input de texto a buscar. 2-sobre qué selectores va a buscar, o sea los selectores son las tarjetas, las cuales va a filtrar (borrar) las que no coincidan. No sobre el <article> cards, sino sobre cada <figure> card (en singular).
   searchFilters(".card-filter", ".card");
 });
 // Fuera del DOMContentLoaded porque en tema_oscuro.js utilizamos otro DOMContentLoaded, y no puede haber uno dentro de otro. Se reemplazarían y uno no funcionaría.
