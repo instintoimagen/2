@@ -7,12 +7,16 @@
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
  <link rel="stylesheet" href="dist/hamburgers.css">
  <link rel="stylesheet" href="css/dom-ejercicios.css">
+ <!-- CSS para mapas de Leaflet -->
+ <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+  integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+  crossorigin="" />
  <!-- bootstrap -->
  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
   integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+ <!--  Fuente de google -->
  <link rel="preconnect" href="https://fonts.googleapis.com">
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
- <!--  Fuente de google -->
  <link href="https://fonts.googleapis.com/css2?family=Electrolize&display=swap" rel="stylesheet">
  <title>Ejercicios del DOM</title>
 </head>
@@ -41,7 +45,7 @@
    <a href="#seccion8">Detección de la Camara Web</a>
    <a href="#seccion9">Geolocalización</a>
    <a href="#seccion10">Filtros de búsquedas</a>
-   <a href="#seccion11">Sección 11</a>
+   <a href="#seccion11">Sorteos Digitales</a>
    <a href="#seccion12">Sección 12</a>
    <a href="#seccion13">Sección 13</a>
    <a href="#seccion14">Sección 14</a>
@@ -123,6 +127,13 @@
   <section id="seccion9" class="section">
    <h2>Geolocalización</h2>
    <div id="geolocation"></div>
+   <br>
+   <div id="myMap"></div>
+   <br>
+   <!-- librería leaflet para el mapa -->
+   <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+    integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+    crossorigin=""></script>
   </section>
 
   <section id="seccion10" class="section">
@@ -167,8 +178,23 @@
  </main>
 
  <section id="seccion11" class="section">
-  <h2>Sección nº11</h2>
+  <h2>Sorteos Digitales</h2>
+  <ul class="players">
+   <li class="player">Coco</li>
+   <li class="player">Joaquín</li>
+   <li class="player">Cocoloco</li>
+   <li class="player">Coquino</li>
+   <li class="player">Cocacho</li>
+   <li class="player">Joaco</li>
+   <li class="player">Quino</li>
+   <li class="player">Pichintrún</li>
+   <li class="player">hermozo bebé</li>
+   <li class="player">Joaquín Ortega Arce</li>
+  </ul>
+  <button id="winner-btn" class="btn btn-success">¿cómo le decimos hoy?</button>
+  <div id="apodo-coco"></div>
  </section>
+
  <section id="seccion12" class="section">
   <h2>Sección nº12</h2>
  </section>

@@ -252,6 +252,12 @@ section ul {
   background-color: #b71c1c;
 }
 
+/* - - - - - Geolocalización  - - - - - -  */
+
+#myMap {
+  height: 50vh;
+}
+
 /* - - - - - Search Filters  - - - - - -  */
 
 .cards {
