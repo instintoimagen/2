@@ -17,13 +17,29 @@ export default function draw(btn, selector, id) {
     const $id = document.getElementById(id);
     if (e.target.matches(btn)) {
       let result = getWinner(selector);
-      alert(result);
+      //alert(result);
       $id.innerHTML = `<br><p>${result}<p>`;
     }
   });
 }
 
-// Del comentario del video en youtube:
+/* 
+// Función para sacar ganador de comentarios en redes sociales (en youtube en este caso)
+
+const getWinnerComment = (selector) => {
+  const $players = document.querySelectorAll(selector),
+    random = Math.floor(Math.random() * $players.length),
+    winner = $players[random];
+
+  return `Hoy le decimos: ${winner.textContent}`;
+};
+// Para youtube, El nombre del que hace el comentario está dentro de un span, dentro de un id author-text, dentro de una etiqueta html (desarrollada en polymer: ytd-comment...)
+getWinnerComment("ytd-comment-thread-renderer #author-text span");
+ */
+
+// - + - + - + - + - + - +
+
+// De un comentario del video en youtube:
 /* 
 Por si a alguien pudiera ayudar aquí dejo una pequeña implementación que hice que crea una nueva lista con los ganadores y los elimina del pool inicial para que así no puedan volver a salir elegidos, así se podrían elegir varios ganadores y que quede constancia de los anteriores, es muy sencillo pero funciona. Gracias por tanto Jon :)
 
