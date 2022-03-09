@@ -13,6 +13,7 @@ import webCam from "./dom/deteccion_webcam.js";
 import getGeolocation from "./dom/geolocalizacion.js";
 import searchFilters from "./dom/filtro_busquedas.js";
 import draw from "./dom/sorteo.js";
+import slider from "./dom/carrusel.js";
 
 document.addEventListener("DOMContentLoaded", (e) => {
   //   El evento del botón del menu hamburguesa, y los otros eventos (reloj, contador, etc) los invocamos, o sea, lo cargamos en el DOMContentListener que es más eficiente que en el window.load
@@ -41,11 +42,14 @@ document.addEventListener("DOMContentLoaded", (e) => {
   responsiveTester("responsive-tester");
   userDeviceInfo("user-device");
   webCam("webcam");
-  getGeolocation("geolocation");
+  //getGeolocation("geolocation");
+
   // Para filtros necesita: 1-el input de texto a buscar. 2-sobre qué selectores va a buscar, o sea los selectores son las tarjetas, las cuales va a filtrar (borrar) las que no coincidan. No sobre el <article> cards, sino sobre cada <figure> card (en singular).
   searchFilters(".card-filter", ".card");
   // Sorteo: 1-El id del botón. 2-El selector (participantes listados en html, con clase "player" en singular). 3-El resultado se mostrará en un div con id "apodo-coco"
   draw("#winner-btn", ".player", "apodo-coco");
+
+  slider(); // No recibie ningún parámetro porque está en una especie de framework, quizás ja ja ;) Siempre se debe respetar los nombres de selectores (clases en el HTML) para que funcione.
 });
 // Fuera del DOMContentLoaded porque en tema_oscuro.js utilizamos otro DOMContentLoaded, y no puede haber uno dentro de otro. Se reemplazarían y uno no funcionaría.
 // En la función darkTheme: 1-Definimos selector (botón), 2-La clase que va a activar el tema oscuro en los elementos que vamos a hacer dark, agregando o quitando de la lista de clases, No lleva punto.
