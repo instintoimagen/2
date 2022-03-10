@@ -9,7 +9,7 @@ export default function darkTheme(btn, classDark) {
     sun = "☀️";
 
   const lightMode = () => {
-    $selectors.forEach((el) => el.classList.remove(classDark));
+    $selectors.forEach((el) => el.classList.remove(classDark)); // El nombre de la clase no la incorporo aquí sino en idex_dom.js por eso no va en comillas.
     $themeBtn.textContent = moon;
     localStorage.setItem("theme", "light");
   };

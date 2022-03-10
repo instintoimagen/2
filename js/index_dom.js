@@ -2,10 +2,10 @@ import hamburguerMenu from "./dom/menu_hamburguesa.js";
 /*
 import { digitalClock, alarm } from "./dom/reloj.js";
 import { moveBall, shortCuts } from "./dom/teclado.js";
-import countdown from "./dom/cuenta_regresiva.js";
+import countdown from "./dom/cuenta_regresiva.js";*/
 import scrollTopButton from "./dom/boton_scroll.js";
 import darkTheme from "./dom/tema_oscuro.js";
-import responsiveMedia from "./dom/objeto_responsive.js"; */
+import responsiveMedia from "./dom/objeto_responsive.js";
 import responsiveTester from "./dom/prueba_responsive.js";
 import userDeviceInfo from "./dom/deteccion_dispositivos.js";
 import networkStatus from "./dom/deteccion_red.js";
@@ -22,9 +22,12 @@ document.addEventListener("DOMContentLoaded", (e) => {
   /* 
  digitalClock("#reloj", "#activar-reloj", "#desactivar-reloj");
   alarm("assets/alarma.mp3", "#activar-alarma", "#desactivar-alarma");
-  countdown("countdown", "Mar 12, 2022 16:30:00", "Feliz Cumple Coco 👦");
+  countdown("countdown", "Mar 12, 2022 16:30:00", "Feliz Cumple Coco 👦");*/
+
   // Definimos el selector (botón), lleva punto por ser clase
   scrollTopButton(".scroll-top-boton");
+
+  /*
   // Definimos el 1-El id (sin # porque lo capturamos con getElementById). 2-El valor de la media query. 3-Contenido Móvil. 4-Contenido Escritorio.
   responsiveMedia(
     "youtube",
@@ -51,12 +54,13 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
   slider(); // No recibie ningún parámetro porque está en una especie de framework, quizás ja ja ;) Siempre se debe respetar los nombres de selectores (clases en el HTML) para que funcione.
 });
-// Fuera del DOMContentLoaded porque en tema_oscuro.js utilizamos otro DOMContentLoaded, y no puede haber uno dentro de otro. Se reemplazarían y uno no funcionaría.
-// En la función darkTheme: 1-Definimos selector (botón), 2-La clase que va a activar el tema oscuro en los elementos que vamos a hacer dark, agregando o quitando de la lista de clases, No lleva punto.
-/* darkTheme(".dark-theme-btn", "dark-mode"); */
 
-// No necesita estar dentro del DOMContentLoaded, ya que se ejecutará cuando el navegador detecte desconexión de la red. No requiere ningún parámetro.
-networkStatus();
+// TEMA OSCURO va fuera del DOMContentLoaded porque en tema_oscuro.js utilizamos otro DOMContentLoaded, y no puede haber uno dentro de otro. Se reemplazarían y uno no funcionaría.
+// En la función darkTheme: 1-Definimos selector (botón), 2-La clase que va a activar el tema oscuro en los elementos que vamos a hacer dark, agregando o quitando de la lista de clases, No lleva punto.
+darkTheme(".dark-theme-btn", "dark-mode");
+
+// DESCONEXION: No necesita estar dentro del DOMContentLoaded, ya que se ejecutará cuando el navegador detecte desconexión de la red. No requiere ningún parámetro (curso JonMircha). Pero de mi producción le agrego classOffline para que pinte de gris el header. Similar al mecanismo dark-mode va sin punto, porque es la clase que va a activar el tema oscuro en los elementos que vamos a hacer dark, agregando o quitando de la lista de clases, No lleva punto.
+networkStatus("classOffline");
 
 // Eventos del Teclado: 1- keydown se ejecuta cuando presionamos una tecla. 2- keyup se ejecuta cuando soltamos una tecla presionada. 3- keypress se estará ejecutando mientras mantengamos presionada la tecla.
 /* document.addEventListener("keydown", (e) => {
