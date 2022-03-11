@@ -14,6 +14,7 @@ import getGeolocation from "./dom/geolocalizacion.js";
 import searchFilters from "./dom/filtro_busquedas.js";
 import draw from "./dom/sorteo.js";
 import slider from "./dom/carrusel.js";
+import smartVideo from "./dom/video_inteligente.js";
 
 document.addEventListener("DOMContentLoaded", (e) => {
   //   El evento del botón del menu hamburguesa, y los otros eventos (reloj, contador, etc) los invocamos, o sea, lo cargamos en el DOMContentListener que es más eficiente que en el window.load
@@ -53,6 +54,8 @@ document.addEventListener("DOMContentLoaded", (e) => {
   draw("#winner-btn", ".player", "apodo-coco");
 
   slider(); // No recibie ningún parámetro porque está en una especie de framework, quizás ja ja ;) Siempre se debe respetar los nombres de selectores (clases en el HTML) para que funcione.
+
+  smartVideo(); // No requiere ningún parámetro, ya que no vamos a pasar el selector de cada video, sino que lo vamos a capturar con el Data Attribute.
 });
 
 // TEMA OSCURO va fuera del DOMContentLoaded porque en tema_oscuro.js utilizamos otro DOMContentLoaded, y no puede haber uno dentro de otro. Se reemplazarían y uno no funcionaría.
