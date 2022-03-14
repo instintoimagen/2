@@ -84,6 +84,7 @@ section ul {
   overflow-y: auto;
   background-color: var(--second-modal-color);
   opacity: 0;
+  visibility: hidden;
   transition: transform 0.3s ease, opacity 0.3s ease;
   /* De arriba */
   transform: translate(0, -100%);
@@ -100,6 +101,7 @@ section ul {
 .panel.is-active {
   transform: translate(0, 0);
   opacity: 1;
+  visibility: visible;
 }
 
 .panel-btn {
@@ -367,4 +369,53 @@ section ul {
 En este caso los siguientes estilos se utilizarán cuando el ancho supere 1024 pixel */
 
 @media screen and (min-width: 1024px) {
+  body {
+    /* Establecemos con gridCSS dos columnas y dos filas */
+    display: grid;
+    grid-template-columns: 80% 20%;
+    grid-template-rows: 5.5rem auto;
+    grid-template-areas:
+      "header header"
+      "main panel";
+  }
+  main {
+    grid-area: main;
+  }
+  .header {
+    grid-area: header;
+  }
+
+  .panel {
+    grid-area: panel;
+    align-self: start;
+    position: sticky;
+    top: 5.5rem;
+    justify-content: flex-start;
+    background-color: var(--second-color);
+    transform: translate(0, 0);
+    opacity: 1;
+    visibility: visible;
+    z-index: 997;
+    padding: 0 0 10 0rem;
+  }
+  .panel-btn {
+    display: none;
+  }
+  .menu {
+    justify-content: start;
+    text-align: right;
+  }
+  .menu a {
+    font-size: 1.3rem;
+    padding: 0.7rem;
+  }
+  .menu a:hover,
+  .menu a.active {
+    color: var(--second-color);
+    background-color: var(--main-color);
+  }
+  .scroll-top-boton {
+    right: initial;
+    left: calc(4.25rem + 1vw);
+  }
 }
