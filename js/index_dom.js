@@ -16,6 +16,7 @@ import draw from "./dom/sorteo.js";
 import slider from "./dom/carrusel.js";
 import scrollSpy from "./dom/scroll_espia.js";
 import smartVideo from "./dom/video_inteligente.js";
+import contactFormValidations from "./dom/validaciones_formulario.js";
 
 document.addEventListener("DOMContentLoaded", (e) => {
   //   El evento del botón del menu hamburguesa, y los otros eventos (reloj, contador, etc) los invocamos, o sea, lo cargamos en el DOMContentListener que es más eficiente que en el window.load
@@ -59,6 +60,8 @@ document.addEventListener("DOMContentLoaded", (e) => {
   scrollSpy(); //Scroll Spy no recibe parámetros porque le vamos a agregar un data attibut a las secciones como a los enlaces que tiene que "espiar".
 
   smartVideo(); // Video inteligente no requiere parámetros ya que no pasamos un "selector" por cada video, sino que los invocamos con data attibute.
+
+  contactFormValidations(); // En páginas con un solo formulario no es necesario, ya que el selector lo incluyo en la programación. En caso de varios forms en una sola pagina: Podría recibir como parámetro un selector para indicarle cuál formulario estará observando.
 });
 
 // TEMA OSCURO va fuera del DOMContentLoaded porque en tema_oscuro.js utilizamos otro DOMContentLoaded, y no puede haber uno dentro de otro. Se reemplazarían y uno no funcionaría.

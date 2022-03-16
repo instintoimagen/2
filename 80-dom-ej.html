@@ -238,9 +238,34 @@
 
   <section id="seccion14" class="section" data-scroll-spy>
    <h2>Validaciones de Formularios</h2>
-   <form class="contact-form">
+   <form class="contact-form" target="_blank" action="https://formsubmit.co/mellamanadrian@hotmail.com" method="POST">
+    <!-- En action va el código para Form Submit, para que lo mande por mail. Recordar agregar target para que no se vaya de la web al enviar -->
     <legend>Envíanos tus comentarios</legend>
-    <input type="text" name="name" placeholder="Escribe tu nombre" title=" ">
+    <input type="text" name="name" placeholder="Escribe tu nombre"
+     title="Nombre solo acepta letras y espacios, cómo te llamás? (hasta 50 caracteres)"
+     pattern="^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]{2,50}$" required>
+
+    <!-- Para las validaciones las trabajamos desde HTML, el navegador verificará si lo ingresado corresponde a lo esperado en ese campo (lo esperado es definido en la propiedad type del input). 
+    Además podemos especificar Expresiones Regulares con la propiedad pattern del input. En HTML5 todas las ExpReg empiezan con ^ y terminan con $ -->
+
+    <input type="email" name="email" placeholder="tu mail?" title="...un mail correcto, si?"
+     pattern="^[A-Za-z0-9]+(\.[A-Za-z0-9]+|-[A-Za-z0-9]+|_[A-Za-z0-9]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*(\.[A-Za-z]{2,15})$"
+     required>
+
+    <input type="text" name="subject" placeholder="Qué asunto es?" title="Te falta escribir un asuntillo" required>
+
+    <textarea name="comments" cols="50" rows="5" placeholder="Escribe tu mensajirijillo"
+     title="No te excedas de los 255 caracteres, porfa..." data-pattern="^(\n|.).{1,255}$" required></textarea>
+    <!-- Usamos el data attibute "data-pattern" ya que no utilizaremos pattern, porque según la documentación HTML no es un atributo válido para <textarea>, y además la base de datos, tiene el límite de 255 caracteres en el tipo de dato que usamos al guardarlo  -->
+
+    <input type="submit" value="Enviarlosss :)">
+
+    <div class="contact-form-loader none">
+     <img src="./assets/ball-triangle.svg" alt="cargando">
+    </div>
+    <div class="contact-form-response none">
+     <p>Los datos fueron enviarijillos ;)</p>
+    </div>
 
    </form>
   </section>
