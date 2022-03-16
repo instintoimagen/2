@@ -17,6 +17,7 @@ import slider from "./dom/carrusel.js";
 import scrollSpy from "./dom/scroll_espia.js";
 import smartVideo from "./dom/video_inteligente.js";
 import contactFormValidations from "./dom/validaciones_formulario.js";
+import speechReader from "./dom/narrador.js";
 
 document.addEventListener("DOMContentLoaded", (e) => {
   //   El evento del botón del menu hamburguesa, y los otros eventos (reloj, contador, etc) los invocamos, o sea, lo cargamos en el DOMContentListener que es más eficiente que en el window.load
@@ -77,3 +78,5 @@ networkStatus("classOffline");
   moveBall(e, ".ball", ".stage");
 });
  */
+
+speechReader(); // Aquí va fuera del DOMContentLoaded porque haremos otro DOMCon... dentro de la función en el archivo javaScript narrador.js
