@@ -69,6 +69,7 @@
       $fetch.innerHTML = `Error nº${err.status}: ${message}`;
     })
     .finally(() => {
+      // el finally es opcional
       console.log("CODE Finally: esto se ejecuntará igual   ;)");
     });
 })();
