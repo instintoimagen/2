@@ -79,14 +79,38 @@ body {
   border-radius: 15px;
 }
 
-.fetch ol,
-.xhr ol {
-  padding: 1rem;
-}
-
 .fetch {
-  background-color: rgba(129, 253, 216, 0.8);
+  background-color: rgba(129, 253, 201, 0.8);
   padding: 2rem;
   margin: 2rem 0.5rem;
   border-radius: 15px;
+}
+
+.fetch-async {
+  background-color: rgba(110, 216, 230, 0.8);
+  padding: 2rem;
+  margin: 2rem 0.5rem;
+  border-radius: 15px;
+}
+
+.axios {
+  background-color: rgba(153, 139, 231, 0.8);
+  padding: 2rem;
+  margin: 2rem 0.5rem;
+  border-radius: 15px;
+}
+
+.axios-async {
+  background-color: rgba(228, 139, 231, 0.8);
+  padding: 2rem;
+  margin: 2rem 0.5rem;
+  border-radius: 15px;
+}
+
+.axios-async ol,
+.axios ol,
+.fetch-async ol,
+.fetch ol,
+.xhr ol {
+  padding: 1rem;
 }

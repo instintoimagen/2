@@ -1,4 +1,6 @@
 // Utilizamos una función anónima autoejecutable para evitar inconvenientes de sobreescribir variables, porque utilizaremos los mismos nombre (clases y variables), ya que utilizaremos este archivo ajax para otras funciones, peticiones asíncronas, etc. No utilizamos modulos. Quedará cerrado, encapsular, "closure".
+
+// objeto XMLHttpRequest
 (() => {
   const xhr = new XMLHttpRequest(),
     $xhr = document.getElementById("xhr"),
@@ -37,6 +39,7 @@
   xhr.send();
 })();
 
+// Fetch
 (() => {
   // No necesitamos instanciar objeto AJAX (ej: new XMLHttpRequest() )
   const $fetch = document.getElementById("fetch"),
@@ -46,7 +49,7 @@
   fetch("https://jsonplaceholder.typicode.com/users")
     .then((res) => {
       // 2-Como fetch es un mecanismo que trabaja con PROMESAS, nos dará una resultante "then catch", similar a lo que hacíamos con if else en el Objeto XMLHttpRequest
-      console.log(res);
+      //console.log(res);
 
       // Los datos se reciben dentro de la prop "body" en formato ReadableStream. Se convierte a formato Json con .json()
       // Extraemos esto en un return y lo procesamos en otro then()
@@ -70,6 +73,104 @@
     })
     .finally(() => {
       // el finally es opcional
-      console.log("CODE Finally: esto se ejecuntará igual   ;)");
+      //console.log("CODE Finally: esto se ejecuntará igual   ;)");
     });
+})();
+
+// Fetch + Async Await
+(() => {
+  // Gran parte es similar al ej anterior (FETCH)
+  const $fetchAsync = document.getElementById("fetch-async"),
+    $fragment = document.createDocumentFragment();
+
+  async function getData() {
+    try {
+      // La "res"puesta es la petición a la API de fetch. Le pedimos que espere (await) antes de ejecutar esas líneas.
+      let res = await fetch("https://jsonplaceholder.typicode.com/users"),
+        json = await res.json();
+
+      //console.log(res, json);
+
+      //Para manejar el error y pasar manualmente al catch: Si res.ok es falso, entonces lanzamos
+      if (!res.ok) throw { status: res.status, statusText: res.statusText };
+
+      json.forEach((el) => {
+        const $li = document.createElement("li");
+        $li.innerHTML = `${el.name} -- ${el.email} -- ${el.phone}`;
+        $fragment.appendChild($li);
+      });
+
+      $fetchAsync.appendChild($fragment);
+    } catch (err) {
+      console.log(err);
+      let message = err.statusText || "Ocurrió un error";
+      $fetchAsync.innerHTML = `Error nº${err.status}: ${message}`;
+    } finally {
+      // el finally es opcional
+      //console.log("CODE Finally: esto se ejecuntará igual   ;)");
+    }
+  }
+
+  getData();
+})();
+
+// Axios
+(() => {
+  const $axios = document.getElementById("axios"),
+    $fragment = document.createDocumentFragment();
+
+  axios
+    .get("https://jsonplaceholder.typicode.com/users")
+    .then((res) => {
+      // El resultado ya viene parseado (no hace falta hacar .parse() ni json, está en la propiedad data como arreglo.
+      //console.log(res.data[0]);
+
+      res.data.forEach((el) => {
+        const $li = document.createElement("li");
+        $li.innerHTML = `${el.name} -- ${el.email} -- ${el.phone}`;
+        $fragment.appendChild($li);
+      });
+
+      $axios.appendChild($fragment);
+    })
+    .catch((err) => {
+      console.log(err.response);
+      let message = err.response.statusText || "Ocurrió un error";
+      $axios.innerHTML = `Error nº${err.response.status}: ${message}`;
+    })
+    .finally(() => {
+      //console.log("CODE Finally: esto se ejecuntará igual   ;)");
+    });
+})();
+
+// Axios + Async Await
+(() => {
+  const $axiosAsync = document.getElementById("axios-async"),
+    $fragment = document.createDocumentFragment();
+
+  axios.get("https://jsonplaceholder.typicode.com/users");
+
+  async function getData() {
+    try {
+      let res = await axios.get("https://jsonplaceholder.typicode.com/users"),
+        json = await res.data;
+
+      json.forEach((el) => {
+        const $li = document.createElement("li");
+        $li.innerHTML = `${el.name} -- ${el.email} -- ${el.phone}`;
+        $fragment.appendChild($li);
+      });
+
+      $axiosAsync.appendChild($fragment);
+    } catch (err) {
+      console.log(err.response);
+      let message = err.response.statusText || "Ocurrió un error";
+      $axiosAsync.innerHTML = `Error nº${err.response.status}: ${message}`;
+    } finally {
+      // el finally es opcional
+      //console.log("CODE Finally: esto se ejecuntará igual   ;)");
+    }
+  }
+
+  getData();
 })();
