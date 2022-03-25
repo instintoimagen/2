@@ -9,14 +9,17 @@
         "A Roma con amor",
         "Deconstruyendo a Harry"
       ],
-      "fecha nacimiento": "Dec 1, 1935",
+      "fechanacimiento": "Dec 1, 1935",
       "nacionalidad": "USA"
     },
     {
       "id": 2,
       "nombre": "Martin Scorsese",
-      "peliculas": ["Casino", "Lobo de Wallstreet"],
-      "fecha nacimiento": "Nov 17, 1942",
+      "peliculas": [
+        "Casino",
+        "Lobo de Wallstreet"
+      ],
+      "fechanacimiento": "Nov 17, 1942",
       "nacionalidad": "USA"
     },
     {
@@ -27,7 +30,7 @@
         "Los Tenenbaums",
         "La Crónica Francesa"
       ],
-      "fecha nacimiento": "May 1, 1969",
+      "fechanacimiento": "May 1, 1969",
       "nacionalidad": "USA"
     },
     {
@@ -39,7 +42,7 @@
         "Perros de la calle",
         "Los 8 más odiados"
       ],
-      "fecha nacimiento": "Mar 27, 1963",
+      "fechanacimiento": "Mar 27, 1963",
       "nacionalidad": "USA"
     },
     {
@@ -50,35 +53,50 @@
         "2001, Odisea del espacio",
         "La naranja mecánica"
       ],
-      "fecha nacimiento": "Jul 26, 1928",
+      "fechanacimiento": "Jul 26, 1928",
       "nacionalidad": "USA"
     },
     {
       "id": 6,
       "nombre": "Christopher Nolan",
-      "peliculas": ["Interstellar", "Origen", "Memento"],
-      "fecha nacimiento": "Jul 30, 1970",
+      "peliculas": [
+        "Interstellar",
+        "Origen",
+        "Memento"
+      ],
+      "fechanacimiento": "Jul 30, 1970",
       "nacionalidad": "UK"
     },
     {
       "id": 7,
       "nombre": "Alfred Hitchcock",
-      "peliculas": ["Psycho", "Vertigo", "The Birds", "Rear Window"],
-      "fecha nacimiento": "Aug 13, 1899",
+      "peliculas": [
+        "Psycho",
+        "Vertigo",
+        "The Birds",
+        "Rear Window"
+      ],
+      "fechanacimiento": "Aug 13, 1899",
       "nacionalidad": "UK"
     },
     {
       "id": 8,
       "nombre": "Pablo Trapero",
-      "peliculas": ["Mundo Grua", "Carancho", "El Clan"],
-      "fecha nacimiento": "Oct 4, 1971",
+      "peliculas": [
+        "Mundo Grua",
+        "Carancho",
+        "El Clan"
+      ],
+      "fechanacimiento": "Oct 4, 1971",
       "nacionalidad": "Argentina"
     },
     {
       "id": 9,
       "nombre": "Damian Szifron",
-      "peliculas": ["Relatos Salvajes"],
-      "fecha nacimiento": "Jul 9, 1975",
+      "peliculas": [
+        "Relatos Salvajes"
+      ],
+      "fechanacimiento": "Jul 9, 1975",
       "nacionalidad": "Argentina"
     },
     {
@@ -89,45 +107,69 @@
         "Delicatessen",
         "El extraordinario viaje de T.S. Spivet"
       ],
-      "fecha nacimiento": "Sep 3, 1953",
+      "fechanacimiento": "Sep 3, 1953",
       "nacionalidad": "France"
+    },
+    {
+      "id": 11,
+      "nombre": "Sergio Ortega",
+      "peliculas": [
+        "Duplos",
+        "Error"
+      ],
+      "fechanacimiento": "May 13, 1981",
+      "nacionalidad": "Argentina"
+    },
+    {
+      "nombre": "Sofia Coppola",
+      "peliculas": "Perdido en Tokio",
+      "fechanacimiento": "May 14, 1971",
+      "nacionalidad": "USA",
+      "id": 12
+    },
+    {
+      "nombre": "Lucrecia Martel",
+      "peliculas": "La Cienaga, Zama, La niña santa, La mujer rubia",
+      "fechanacimiento": "1966-12-14",
+      "nacionalidad": "Argentina",
+      "id": 13
     }
   ],
   "actrices": [
     {
       "id": 1,
       "nombre": "Emma Stone",
-      "fecha nacimiento": "Nov 6, 1988"
+      "fechanacimiento": "Nov 6, 1988"
     },
     {
       "id": 2,
       "nombre": "Scarlett Johansson",
-      "fecha nacimiento": "Nov 22, 1984"
+      "fechanacimiento": "Nov 22, 1984"
     },
     {
       "id": 3,
       "nombre": "Penélope Cruz",
-      "fecha nacimiento": "Apr 28, 1974"
+      "fechanacimiento": "Apr 28, 1974"
     },
     {
       "id": 4,
       "nombre": "Natalie Portman",
-      "fecha nacimiento": "Jun 9, 1981"
+      "fechanacimiento": "Jun 9, 1981"
     },
     {
       "id": 5,
       "nombre": "Winona Ryder",
-      "fecha nacimiento": "Oct 29, 1971"
+      "fechanacimiento": "Oct 29, 1971"
     },
     {
       "id": 6,
       "nombre": "Sharon Stone",
-      "fecha nacimiento": "Mar 10, 1958"
+      "fechanacimiento": "Mar 10, 1958"
     },
     {
       "id": 7,
       "nombre": "Christina Ricci",
-      "fecha nacimiento": "FEb 12, 1980"
+      "fechanacimiento": "FEb 12, 1980"
     }
   ]
 }

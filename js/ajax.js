@@ -45,7 +45,7 @@
   const $fetch = document.getElementById("fetch"),
     $fragment = document.createDocumentFragment();
 
-  // En fetch: 1-ejecutamos el recurso fetch(), como parámetros: le ponemos el recurso (ej la API de placeholder), e incluso podemos pasar un objeto con opciones (no obligatorio).
+  // En fetch: 1-ejecutamos el recurso fetch(), como parámetros: le ponemos el recurso (ej la API de placeholder), e incluso podemos pasar un objeto con opciones (no obligatorio) (por def. el método es GET).
   fetch("https://jsonplaceholder.typicode.com/users")
     .then((res) => {
       // 2-Como fetch es un mecanismo que trabaja con PROMESAS, nos dará una resultante "then catch", similar a lo que hacíamos con if else en el Objeto XMLHttpRequest

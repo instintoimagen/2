@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+ <meta charset="UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link rel="stylesheet" href="css/crud_ajax.css">
+ <!-- Fuentes google -->
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link
+  href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@1,400;1,477&family=Noto+Sans:wght@700&family=Raleway:wght@300&display=swap"
+  rel="stylesheet">
+
+ <title>CRUD API REST AJAX</title>
+</head>
+
+<body>
+
+ <header class="header" data-offline>
+  <h4>Curso JavaScript</h4>
+  <h1>CRUD API REST AJAX</h1>
+ </header>
+
+
+ <section class="plantaDev">
+  <img id="plantaDev" src="assets/dev-plant.jpg" alt="La planta Dev">
+ </section>
+
+ <section class="crud">
+  <article>
+   <h2 class="crud-title">Agregar Directores/as de Cine</h2>
+   <form action="" class="crud-form">
+    <input type="text" name="nombre" placeholder="nombre y apellido del director/a" required><br><br>
+    <input type="text" name="peliculas" placeholder="films, [en un arreglo]" required><br><br>
+    <input type="date" name="fechanacimiento" placeholder="nacimiento: Mes dia, AÑO" required><br><br>
+    <input type="text" name="nacionalidad" placeholder="nacionalidad" required><br><br>
+    <input type="submit" value="enviar">
+    <input type="hidden" name="id">
+   </form>
+  </article><br><br><br>
+  <article>
+   <h2>Ver Directores/as</h2>
+   <table class="crud-table">
+    <thead>
+     <tr>
+      <th>Nombre</th>
+      <th>Películas</th>
+      <th>Fecha de nacimiento</th>
+      <th>Nacionalidad</th>
+      <th>Acciones</th>
+     </tr>
+    </thead>
+    <tbody></tbody>
+   </table>
+  </article>
+ </section>
+
+ <template id="crud-template">
+  <tr>
+   <td class="nombre"></td>
+   <td class="peliculas"></td>
+   <td class="fechanacimiento"></td>
+   <td class="nacionalidad"></td>
+   <td>
+    <button class="edit">Editar</button>
+    <button class="delete">Borrar</button>
+   </td>
+  </tr>
+ </template>
+
+ <section class="crudDiagram">
+  <img id="crudDiagrama" src="assets/crud.png" alt="Diagrama de Crud">
+ </section>
+
+ <script>
+  // Cuando carga el document, va a consultar la API y guarda en la variable $table el contenido que luego se cargará dinámicamente en el HTML.
+  const $table = document.querySelector(".crud-table"),
+   $form = document.querySelector(".crud-form"),
+   $title = document.querySelector(".crud-title"),
+   $template = document.getElementById("crud-template").content, // Para el template no me interesa el "selector", sino su contenido o sea la estructura, para darle esa presentación a la información que traigo de la API 
+   $fragment = document.createDocumentFragment();
+
+  // Encapsulamos en una función los cuatro pasos AJAX, del Objeto XMLHttpRequest: 1- crear la instancia del objeto, 2- el listener, 3- abrir la petición (GET), 4- enviar la petición. Esta función expresada nos pedirá los elementos necesarios.
+  const ajax = (options) => {
+   // "options" será un objeto. lo desestructuramos así:
+   let { url, method, success, error, data } = options; // lo que está entre llaves {} debe estar contenido en el objeto options.
+   const xhr = new XMLHttpRequest(); // Paso#1
+
+   xhr.addEventListener("readystatechange", e => {// Paso#2
+    if (xhr.readyState !== 4) return; // Validamos 
+    if (xhr.status >= 200 && xhr.status < 300) {
+     // Si la respuesta del servidor es exitosa (códigos 200), convertimos (JSON.parse) la respuesta en formato javaScript y la ejecutamos en la función success()
+     let json = JSON.parse(xhr.responseText);
+     success(json);
+    } else {
+     let message = xhr.statusText || "Ocurrió un error";
+     error(`Grave error ${xhr.status}: ${message}`);
+    }
+   });
+
+   xhr.open(method || "GET", url); // Paso#3
+
+   // Los envíos deben contener el cuerpo (con la data a agregar), y una cabecera, por cada cabecera va el par: "Atributo", "Valor"
+   xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8"); // Es necesaria la cabecera porque json-server está esperando código en formato json
+   xhr.send(JSON.stringify(data)); // Paso#4. A la inversa de recibir data y tener que parsearla, para enviar lo convertimos a cadena de texto, con el metodo .strigify()
+  }
+
+  // función que nos trae de la base todos los directores/as.
+  const getAllDirectors = () => {
+   ajax({
+    method: "GET",
+    url: "http://localhost:5555/directores",
+    success: (res) => {
+     // "res" nos trae la respuesta de la base, entonces por cada elemento: que busque en el contenido del template, el selector con la clase "nombre", y que le ponga en su contenido textual (textContent) lo que viene de la base en la prop "nombre" (nombre del director/a). Luego hacemos lo mismo para películas, etc.
+     res.forEach(el => {
+      $template.querySelector(".nombre").textContent = el.nombre;
+      $template.querySelector(".peliculas").textContent = el.peliculas;
+      $template.querySelector(".fechanacimiento").textContent = el.fechanacimiento;
+      $template.querySelector(".nacionalidad").textContent = el.nacionalidad;
+
+      //Para los botones Editar y Borrar, le ponemos data attribute, para que al hacer click en editar los datos pasen al formulario. Para eso buscamos dentro de $template el elemento con la clase "edit" (cada botón), le creamos el data attribute con .dataset y lo almacenamos con nombre "id", hacemos los mismo con nombre, películas, etc.
+      $template.querySelector(".edit").dataset.id = el.id;
+      $template.querySelector(".edit").dataset.nombre = el.nombre;
+      $template.querySelector(".edit").dataset.peliculas = el.peliculas;
+      $template.querySelector(".edit").dataset.fechanacimiento = el.fechanacimiento;
+      $template.querySelector(".edit").dataset.nacionalidad = el.nacionalidad;
+
+      $template.querySelector(".delete").dataset.id = el.id;
+      //para trabajar con templates debemos clonarlo para que quede en memoria. El 2do parámetro, "true" es para que deje el contenido, si fuera "false" lo clona vacío.
+      let $clone = document.importNode($template, true);
+      $fragment.appendChild($clone);
+     });
+
+     // Cuando termina de recorrerlo (el forEach), que agregue lo que está en $fragment al "tbody" de la tabla en el HTML
+     $table.querySelector("tbody").appendChild($fragment);
+
+    },
+    error: (err) => {
+     console.warn("Errorjirijillo", err);
+     $table.insertAdjacentHTML("afterend", `<p><b>${err}</b></p>`)
+    },
+    data: null
+   })
+  }
+
+
+  document.addEventListener("DOMContentLoaded", getAllDirectors)
+
+  //  - - -  Creación y Edición de datos  - - - - 
+  // Funcionan a nivel de eventos, al procesarse el formulario
+
+  document.addEventListener("submit", e => {
+   // Si el objeto que origina el evento es el formulario ($form) entonces ejecuta:
+   if (e.target === $form) {
+    e.preventDefault(); // detenemos el procesamiento por defecto porque se hará a través de AJAX.
+
+    // Usando el input oculto (hidden), determinamos si se crea un nuevo dato o se modifica uno existente. Si el valor que tiene está vacío es un dato nuevo (create con POST). Si no está vacío, tiene valores añadidos con el botón "editar", es una modificación (y se hace con PUT).
+    if (!e.target.id.value) {
+     // Create - POST
+     ajax({
+      url: "http://localhost:5555/directores/",
+      method: "POST",
+      success: (res) => location.reload(),
+      error: (err) => $form.insertAdjacentHTML("afterend", `<p><b>${err}</b></p>`),
+      data: {
+       nombre: e.target.nombre.value,
+       peliculas: e.target.peliculas.value,
+       fechanacimiento: e.target.fechanacimiento.value,
+       nacionalidad: e.target.nacionalidad.value,
+      }
+     });
+    } else {
+     // Update - PUT
+     ajax({
+      url: `http://localhost:5555/directores/${e.target.id.value}`, // Tenemos que formar dinámicamente la ruta, para que nos traiga del input oculto (id), el valor, ahí está almacenado el número que completa la url
+      method: "PUT",
+      success: (res) => location.reload(),
+      error: (err) => $form.insertAdjacentHTML("afterend", `<p><b>${err}</b></p>`),
+      data: {
+       nombre: e.target.nombre.value,
+       peliculas: e.target.peliculas.value,
+       fechanacimiento: e.target.fechanacimiento.value,
+       nacionalidad: e.target.nacionalidad.value,
+      }
+     });
+
+    }
+   }
+  });
+
+  // Botones Editar y Eliminar
+  document.addEventListener("click", e => {
+   // si presiona editar que se carguen los input del form con lo que está en el dataset nombre, peliculas, etc
+   if (e.target.matches(".edit")) {
+    $title.textContent = "Editar Director/a";
+    $form.nombre.value = e.target.dataset.nombre;
+    $form.peliculas.value = e.target.dataset.peliculas;
+    $form.fechanacimiento.value = e.target.dataset.fechanacimiento;
+    $form.nacionalidad.value = e.target.dataset.nacionalidad;
+    $form.id.value = e.target.dataset.id;
+
+   }
+   if (e.target.matches(".delete")) {
+    //Si presiona borrar se pide confirmación por número de id
+    let isDelete = confirm(`¿Segurijillo de borrar el director/a #${e.target.dataset.id}?`);
+
+    if (isDelete) {
+     // Borrar - DELETE
+     ajax({
+      url: `http://localhost:5555/directores/${e.target.dataset.id}`, // En los botones de borrar, lo buscamos por data attribute
+      method: "DELETE",
+      success: (res) => location.reload(),
+      error: (err) => alert(err),
+     });
+    }
+   }
+  })
+
+
+ </script>
+</body>
+
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+ <meta charset="UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link rel="stylesheet" href="css/crud_ajax.css">
+ <!-- Fuentes google -->
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link
+  href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@1,400;1,477&family=Noto+Sans:wght@700&family=Raleway:wght@300&display=swap"
+  rel="stylesheet">
+
+ <title>CRUD API REST AXIOS</title>
+</head>
+
+<body>
+
+ <header class="header" data-offline>
+  <h1>CRUD API REST CON AXIOS</h1>
+  <h4>MÁS FUNCIONES ASÍNCRONAS</h4>
+ </header>
+
+
+ <section class="plantaDev">
+  <img id="plantaDev" src="assets/dev-plant.jpg" alt="La planta Dev">
+ </section>
+
+ <section class="crud-axios">
+  <article>
+   <h2 class="crud-title">Agregar Directores/as de Cine</h2>
+   <form action="" class="crud-form">
+    <input type="text" name="nombre" placeholder="nombre y apellido del director/a" required><br><br>
+    <input type="text" name="peliculas" placeholder="films, [en un arreglo]" required><br><br>
+    <input type="date" name="fechanacimiento" placeholder="fecha nacimiento, en formato Mes xx, AÑO" required><br><br>
+    <input type="text" name="nacionalidad" placeholder="nacionalidad" required><br><br>
+    <input type="submit" value="enviar">
+    <input type="hidden" name="id">
+   </form>
+  </article><br><br><br>
+  <article>
+   <h2>Ver Directores/as</h2>
+   <table class="crud-table">
+    <thead>
+     <tr>
+      <th>Nombre</th>
+      <th>Películas</th>
+      <th>Fecha de nacimiento</th>
+      <th>Nacionalidad</th>
+      <th>Acciones</th>
+     </tr>
+    </thead>
+    <tbody></tbody>
+   </table>
+  </article>
+ </section>
+
+ <template id="crud-template">
+  <tr>
+   <td class="nombre"></td>
+   <td class="peliculas"></td>
+   <td class="fechanacimiento"></td>
+   <td class="nacionalidad"></td>
+   <td>
+    <button class="edit">Editar</button>
+    <button class="delete">Borrar</button>
+   </td>
+  </tr>
+ </template>
+
+ <section class="crudDiagram">
+  <img id="crudDiagrama" src="assets/crud.png" alt="Diagrama de Crud">
+ </section>
+
+ <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+ <script>
+  // Cuando carga el document, va a consultar la API y guarda en la variable $table el contenido que luego se cargará dinámicamente en el HTML.
+  const $table = document.querySelector(".crud-table"),
+   $form = document.querySelector(".crud-form"),
+   $title = document.querySelector(".crud-title"),
+   $template = document.getElementById("crud-template").content, // Para el template no me interesa el "selector", sino su contenido o sea la estructura, para darle esa presentación a la información que traigo de la API 
+   $fragment = document.createDocumentFragment();
+
+  const getAllDirectors = async () => {
+   try {
+    let res = await axios.get("http://localhost:5555/directores"),
+     json = await res.data;
+
+    json.forEach(el => {
+     // Buscar en $Template el selector con la clase "nombre" y en su contenido textual colocar lo que viene de la base en la propiedad "nombre" (igual con los otros).
+     $template.querySelector(".nombre").textContent = el.nombre;
+     $template.querySelector(".peliculas").textContent = el.peliculas;
+     $template.querySelector(".fechanacimiento").textContent = el.fechanacimiento;
+     $template.querySelector(".nacionalidad").textContent = el.nacionalidad;
+
+     // Botones Editar y Borrar, data attribute
+     $template.querySelector(".edit").dataset.id = el.id;
+     $template.querySelector(".edit").dataset.nombre = el.nombre;
+     $template.querySelector(".edit").dataset.peliculas = el.peliculas;
+     $template.querySelector(".edit").dataset.fechanacimiento = el.fechanacimiento;
+     $template.querySelector(".edit").dataset.nacionalidad = el.nacionalidad;
+
+     $template.querySelector(".delete").dataset.id = el.id;
+
+     // Clonación para template
+     let $clone = document.importNode($template, true);
+     $fragment.appendChild($clone)
+    });
+
+    // Pintar tabla con el $fragment listo
+    $table.querySelector("tbody").appendChild($fragment);
+
+   } catch (err) {
+    let message = err.statusText || "Ocurrió un error";
+    $table.insertAdjacentHTML("afterend", `<p><b>Error nº ${err.status}: ${message}</b></p>`)
+   }
+  }
+
+  // La lectura en la base y representación de los datos se hace a la carga del DOM:
+  document.addEventListener("DOMContentLoaded", getAllDirectors);
+
+
+  //  - - -  Creación y Edición de datos  - - - 
+
+  // Se ejecuta al procesarse el formulario, en modo asíncrono, por eso lleva "async"
+  document.addEventListener("submit", async e => {
+   if (e.target === $form) {
+    e.preventDefault();
+
+    if (!e.target.id.value) {
+     // Create - POST
+     try {
+      let options = {
+       method: "POST",
+       headers: {
+        "Content-type": "application/json; charset=utf-8"
+       },
+       data: JSON.stringify({
+        nombre: e.target.nombre.value,
+        peliculas: e.target.peliculas.value,
+        fechanacimiento: e.target.fechanacimiento.value,
+        nacionalidad: e.target.nacionalidad.value
+       })
+      },
+       res = await axios("http://localhost:5555/directores", options),
+       json = await res.data;
+
+      alert(`Nuevo dato ingresado correctamente`);
+
+      location.reload();
+
+     } catch (err) {
+      let message = err.statusText || "Ocurrió un error";
+      $form.insertAdjacentHTML("afterend", `<p><b>Error ${err.status}: ${message}</b></p>`)
+
+     }
+
+    } else {
+     // Update - PUT
+     try {
+      let options = {
+       method: "PUT",
+       headers: {
+        "Content-type": "application/json; charset=utf-8"
+       },
+       data: JSON.stringify({
+        nombre: e.target.nombre.value,
+        peliculas: e.target.peliculas.value,
+        fechanacimiento: e.target.fechanacimiento.value,
+        nacionalidad: e.target.nacionalidad.value
+       })
+      },
+       res = await axios(`http://localhost:5555/directores/${e.target.id.value}`, options),
+       json = await res.data;
+
+      alert(`Se actualizó el dato`);
+
+      location.reload();
+
+     } catch (err) {
+      let message = err.statusText || "Ocurrió un error";
+      $form.insertAdjacentHTML("afterend", `<p><b>Error ${err.status}: ${message}</b></p>`)
+     }
+    }
+   }
+  });
+
+  //  - - - Boton Editar  - - -
+  document.addEventListener("click", async e => {
+   if (e.target.matches(".edit")) {
+    $title.textContent = "Editar Director/a";
+    $form.nombre.value = e.target.dataset.nombre;
+    $form.peliculas.value = e.target.dataset.peliculas;
+    $form.fechanacimiento.value = e.target.dataset.fechanacimiento;
+    $form.nacionalidad.value = e.target.dataset.nacionalidad;
+    $form.id.value = e.target.dataset.id;
+   }
+
+   //  - - Botón Eliminar - -
+   if (e.target.matches(".delete")) {
+    let isDelete = confirm(`¿Segurijillo de borrar el director/a #${e.target.dataset.id}?`);
+    if (isDelete) {
+     // Borrar - DELETE
+     try {
+      let options = {
+       method: "DELETE",
+       headers: {
+        "Content-type": "application/json; charset=utf-8"
+       }
+      },
+       res = await axios(`http://localhost:5555/directores/${e.target.dataset.id}`, options),
+       json = await res.data;
+
+      alert(`Dato borrado de la base`);
+
+      location.reload();
+
+     } catch (err) {
+      let message = err.statusText || "Ocurrió un error";
+      alert(`Ups error nº${err.status}: ${message}`)
+     }
+    }
+   }
+  })
+
+
+
+ </script>
+</body>
+
+</html>
