@@ -75,7 +75,7 @@
    align-items: center;
    text-align: center;
    min-height: 50vh;
-   margin-top: 1rem;
+   margin-top: .01rem;
   }
 
   footer {
@@ -87,6 +87,7 @@
    position: fixed;
    bottom: 0;
    width: 100%;
+   padding: 0 1rem;
   }
 
   progress {
@@ -99,10 +100,10 @@
    border: #000;
    border-style: dashed;
    border-radius: 25px;
-   border-width: .75rem;
+   border-width: .5rem;
    background-color: rgba(135, 218, 112, 0.8);
-   width: 80%;
-   height: 40vh;
+   width: 60%;
+   height: 20vh;
    display: flex;
    justify-content: center;
    align-items: center;
@@ -111,7 +112,7 @@
 
   .drop-zone.is-active {
    border: dashed rgb(44, 44, 44);
-   border-width: 0.85rem;
+   border-width: 0.6rem;
    background-color: rgba(154, 221, 135, 0.8);
    animation: pulse 1.5s infinite;
    animation-timing-function: linear;
@@ -134,7 +135,7 @@
    grid-template-rows: auto;
    justify-items: center;
    background-color: rgba(165, 213, 241, 0.8);
-   padding: 2rem;
+   padding: 0 2rem .5rem;
    margin: 1rem 0.5rem;
    border-radius: 15px;
   }
@@ -159,13 +160,14 @@
   </article>
 
   <section class="cargador">
+   <h4>...o búscalos en el dispositivo desde aquí</h4>
    <input type="file" id="files" name="files" multiple>
   </section>
  </main>
 
 
  <footer>
-  <p>El servidor soporta archivos de hasta 10Mb cada uno</p>
+  <p>Se pueden cargar varios archivos de hasta 10Mb cada uno</p>
  </footer>
 
 
@@ -173,7 +175,8 @@
  <script>
 
   const $main = document.querySelector("main"),
-   $dropZone = document.querySelector(".drop-zone");
+   $dropZone = document.querySelector(".drop-zone"),
+   $files = document.getElementById("files");
 
   // La función uploader sube archivos y conecta con php, en esta funcion ejecuntamos AJAX por lo tanto tiene los cuatro pasos (instanciar objeto xhr, el listener, abrir la petición y enviarla).
   const uploader = (archivo) => {
@@ -191,7 +194,6 @@
      let message = xhr.statusText || "Ocurrió un error";
      console.error(`Error nº${xhr.status}: ${message}`);
     }
-
    })
 
    xhr.open("POST", "assets/uploader.php");
@@ -211,6 +213,7 @@
    $main.insertAdjacentElement("beforeend", $progress);
    $main.insertAdjacentElement("beforeend", $span);
 
+
    const fileReader = new FileReader(); // la instancia del objeto FileReader() sirve para calcular los bits que se van cargando y hacer la representación con la etiqueta progress, (FileReader es una API de los navegadores).
    fileReader.readAsDataURL(file); // este método recibe como parámetro el archivo que va a leer, (el que se carga). FileReader tiene varios eventos, aquí usamos "progress" y "loadend" y lo escuchamos con dos listener:
 
@@ -223,7 +226,6 @@
     let progress = parseInt((e.loaded * 100) / e.total); // Uso parseInt para que omita decimales
     $progress.value = progress; // le asigno a la variable del DOM $progress (que creará la etiqueta <progress> en el HTML), el resultado de la variable progress que me indica el porcentaje mientras va cargado
     $span.innerHTML = `<h5>${file.name} - ${progress} %</h5>` // Inserto el código HTML con el nombre del archivo (file.name), un guión y el porcentaje mientras carga (variable progress)
-
    });
 
    fileReader.addEventListener("loadend", e => {
@@ -261,6 +263,17 @@
    e.target.classList.remove("is-active");
    const files = Array.from(e.dataTransfer.files);
    files.forEach(el => progressUpload(el));
+  });
+
+  // Para cargar archivos con el form, seleccionándolos del sispositivo:
+  document.addEventListener("change", e => {
+   if (e.target === $files) {
+    // Al ser un input del tipo "file" puedo usar el método .files para obtener información de el o los archivos (un Filelist). Y como el forEach solo se ejecuta en elementos iterables, como los arreglos, lo que obtengo de este e.target.files (Filelist) no es iterable, por lo tanto necesitamos convertirlo con Array.from()
+    const files = Array.from(e.target.files);
+
+    // Por cada archivo va a ejecutar la representación del progress. Si no ubiera una representación con barra progress aquí directamente va la función uploader
+    files.forEach(el => progressUpload(el)); // La función que hace la carga la ejecuntamos al final de la progressUpload. En caso de no usar representación del progress la ejecutamos en esta linea en el forEach.
+   }
   });
 
 

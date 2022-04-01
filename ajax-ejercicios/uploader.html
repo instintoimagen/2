@@ -191,7 +191,7 @@
     const files = Array.from(e.target.files);
 
     // Por cada archivo va a ejecutar la representación del progress. Si no ubiera una representación con barra progress aquí directamente va la función uploader
-    files.forEach(el => progressUpload(el)); // La función que hace la carga la ejecuntamos al final de la progressUpload. Antes la ejecutábamos en esta linea en el forEach.
+    files.forEach(el => progressUpload(el)); // La función que hace la carga la ejecuntamos al final de la progressUpload. En caso de no usar representación del progress la ejecutamos en esta linea en el forEach.
    }
   });
 
