@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Envío de formulario con Fetch y FormSubmit</title>
+    <style>
+        /* ++++   RESET CSS  ++++ */
+:root {
+  --main-font: sans-serif;
+  --font-size: 14px;
+  --main-color: #f7df1e;
+  --second-color: #222;
+  --main-modal-color: rgba(247, 222, 30, 0.85);
+  --second-modal-color: rgba(34, 34, 34, 0.85);
+  --container-width: 1200px;
+}
+
+html {
+  box-sizing: border-box;
+  font-family: var(--main-font);
+  font-size: var(--font-size);
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+}
+
+.plantaDev {
+display: flex;
+}
+
+#plantaDev {
+width: 100%;
+max-height: 25vh;
+object-fit: cover;
+object-position: 50% 70%;
+}
+
+.header {
+  position: sticky;
+  z-index: 998;
+  top: 0;
+  padding: 0 0 0.5rem 0;
+  background-color: var(--main-color);
+  color: var(--second-color);
+  transition: all 0.7s ease;
+}
+
+.header h1 {
+  margin: 0 auto;
+  text-align: center;
+}
+.header h4 {
+  margin: 0 auto;
+  text-align: center;
+}
+
+
+/*  - - - -    CONTACT FORM VALIDATION   - - - -  */
+.contact-form {
+  --form-ok-color: #4caf50;
+  --form-error-color: #f44336;
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%;
+}
+
+.contact-form > * {
+  /* Usamos simbolo mayor y asterisco para identificar a todos los hijos de "contact-form" */
+  padding: 0.5rem;
+  margin: 1rem auto;
+  display: block;
+  width: 100%;
+}
+
+.contact-form textarea {
+  resize: none;
+}
+
+.contact-form legend,
+.contact-form-response {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.contact-form input,
+.contact-form textarea {
+  font-size: 1rem;
+  font-family: sans-serif;
+}
+
+.contact-form input[type="submit"] {
+  /* Para los input que tengan atributo type submit, dentro de "contact-form" */
+  width: 30%;
+  font-weight: bold;
+  cursor: pointer;
+  color: #fff;
+  background-color: #05b80b;
+  border: none;
+  border-radius: 7px;
+}
+
+.contact-form *::placeholder {
+  /* Para todos los hijos de "contact-form" que tenga atributo "placeholder"  */
+  color: #000;
+}
+
+.contact-form [required]:valid {
+  /* Que esté dentro de "contact-form" y que tenga el atributo "required" y sea válido */
+  border: thin solid var(--form-ok-color);
+}
+
+.contact-form [required]:invalid {
+  border: thin solid var(--form-error-color);
+}
+
+.contact-form-error {
+  margin-top: -1rem;
+  background-color: var(--form-error-color);
+  color: #fff;
+  transition: all 800ms ease;
+}
+
+.contact-form-error.is-active {
+  display: block;
+  animation: show-message 1s 1 normal 0s ease-out both;
+}
+
+.none {
+  display: none;
+}
+
+@keyframes show-message {
+  0% {
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  100% {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+    </style>
+</head>
+<body>
+    
+ <header class="header">
+    <h4>Curso JavaScript</h4>
+    <h1>Envío de formulario con Fetch y FormSubmit</h1>
+</header>
+
+<section class="plantaDev">
+    <img id="plantaDev" src="../assets/dev-plant.jpg" alt="La planta Dev">
+</section>
+    
+
+    <form class="contact-form" target="_blank" action="https://formsubmit.co/mellamanadrian@hotmail.com" method="POST">
+        <!-- En action va el código para Form Submit, para que lo mande por mail. Recordar agregar target para que no se vaya de la web al enviar -->
+        <legend>Envíanos tus comentarios</legend>
+        <input type="text" name="name" placeholder="Escribe tu nombre"
+         title="Nombre solo acepta letras y espacios, cómo te llamás? (hasta 50 caracteres)"
+         pattern="^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]{2,50}$" required>
+    
+        <!-- Para las validaciones las trabajamos desde HTML, el navegador verificará si lo ingresado corresponde a lo esperado en ese campo (lo esperado es definido en la propiedad type del input). 
+        Además podemos especificar Expresiones Regulares con la propiedad pattern del input. En HTML5 todas las ExpReg empiezan con ^ y terminan con $ -->
+    
+        <input type="email" name="email" placeholder="tu mail?" title="...un mail correcto, si?"
+         pattern="^[A-Za-z0-9]+(\.[A-Za-z0-9]+|-[A-Za-z0-9]+|_[A-Za-z0-9]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*(\.[A-Za-z]{2,15})$"
+         required>
+    
+        <input type="text" name="subject" placeholder="Qué asunto es?" title="Te falta escribir un asuntillo" required>
+    
+        <textarea name="comments" cols="50" rows="5" placeholder="Escribe tu mensajirijillo"
+         title="No te excedas de los 255 caracteres, porfa..." data-pattern="^(\n|.).{1,255}$" required></textarea>
+        <!-- Usamos el data attibute "data-pattern" ya que no utilizaremos pattern, porque según la documentación HTML no es un atributo válido para <textarea>, y además la base de datos, tiene el límite de 255 caracteres en el tipo de dato que usamos al guardarlo  -->
+    
+        <input type="submit" value="Enviarlosss :)">
+    
+        <div class="contact-form-loader none">
+         <img src="../assets/ball-triangle.svg" alt="cargando">
+        </div>
+        <div class="contact-form-response none">
+         <p>Los datos fueron enviarijillos ;)</p>
+        </div>
+    
+    </form>
+
+<script>
+
+export default function contactFormValidations() {
+  // En variable con simbolo $ traemos el formulario, y TODOS los input con atributo required. Que son los que nos interesa validar.
+  const $form = document.querySelector(".contact-form"),
+    $input = document.querySelectorAll(".contact-form [required]");
+
+  // Por cada input creamos un elemento span
+  $input.forEach((input) => {
+    const $span = document.createElement("span");
+    // Para que sea único: Le asignamos como id el valor que tiene el input en su propiedad name.
+    $span.id = input.name;
+    // En el text content le ponemos el valor que tiene el input en su propiedad title (en el HTML pusimos el texto que dice el mensaje de error).
+    $span.textContent = input.title;
+    // Para que tome los estilos les ponemos las clases contact-form-error y none, esta última para que no aparezca hasta que sea necesario:
+    $span.classList.add("contact-form-error", "none");
+    // Para insertar el span debajo de su correspondiente input:
+    input.insertAdjacentElement("afterend", $span);
+  });
+
+  // LAS VALIDACIONES pueden hacerse en el submit o mientras el usuario escribe (keyup).
+  document.addEventListener("keyup", (e) => {
+    if (e.target.matches(".contact-form [required]")) {
+      let pattern = e.target.pattern || e.target.dataset.pattern;
+      // Usando op. de corto circuito: Traigo el pattern de los input, pero como el <textarea> no tiene pattern será null, en ese caso que busque el data-attribute "data-pattern"
+
+      if (pattern && e.target.value !== "") {
+        // El && es para esperar que el usuario empiece a escribir, que no esté vacío.
+
+        // Guardo la expresión regular, que viene en "pattern", dentro de la variable "regex".
+        let regex = new RegExp(pattern);
+        // Retorna un op ternario: si la expresion regular, guardada en regex, no valida (lo que viene en la propiedad value)
+        return !regex.exec(e.target.value)
+          ? document.getElementById(e.target.name).classList.add("is-active")
+          : document
+              .getElementById(e.target.name)
+              .classList.remove("is-active");
+      }
+      if (!pattern) {
+        return e.target.value === ""
+          ? document.getElementById(e.target.name).classList.add("is-active")
+          : document
+              .getElementById(e.target.name)
+              .classList.remove("is-active");
+      }
+    }
+  });
+
+  document.addEventListener("submit", (e) => {
+    //e.preventDefault();
+
+    // Para que aparezca la animación "Cargando": guardamos en variable $loader. También el mensaje de confirmación.
+    const $loader = document.querySelector(".contact-form-loader"),
+      $response = document.querySelector(".contact-form-response");
+
+    $loader.classList.remove("none");
+
+    // simulamos envíos con un setTimeout, y hacemos aparecer y desaparecer la animación de "Cargando" y el mensaje de confirmación.
+    setTimeout(() => {
+      $loader.classList.add("none");
+      $response.classList.remove("none");
+      $form.reset();
+
+      setTimeout(() => $response.classList.add("none"), 3000);
+    }, 3000);
+  });
+}
+
+
+</script>
+    
+</body>
+</html>
