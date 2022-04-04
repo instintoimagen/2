@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+ <meta charset="UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Pokémons</title>
+
+ <style>
+  :root {
+   --title-font: "Noto Sans", sans-serif;
+   --serif-font: "Lora", serif;
+   --main-font: "Raleway", sans-serif;
+   --font-size: 15px;
+   --main-color: rgb(30, 142, 247);
+   --second-color: rgb(61, 61, 61);
+   --main-modal-color: rgba(30, 142, 247, 0.85);
+   --second-modal-color: rgba(61, 61, 61, 0.85);
+   --container-width: 1200px;
+  }
+
+  html {
+   box-sizing: border-box;
+   font-size: 16px;
+   font-family: sans-serif;
+  }
+
+  *,
+  *::before,
+  *::after {
+   box-sizing: inherit;
+  }
+
+  body {
+   margin: 0;
+   overflow-x: hidden;
+  }
+
+  .header {
+   position: sticky;
+   z-index: 998;
+   top: 0;
+   padding: 0 0 0.5rem 0;
+   background-color: var(--main-color);
+   color: var(--second-color);
+   transition: all 0.7s ease;
+  }
+
+  .header h1 {
+   font-family: var(--title-font);
+   margin: 0 auto;
+   text-align: center;
+  }
+
+  .header h4 {
+   margin: 0 auto;
+   text-align: center;
+  }
+
+  .plantaDev {
+   display: flex;
+  }
+
+  #plantaDev {
+   width: 100%;
+   max-height: 17vh;
+   object-fit: cover;
+   object-position: 50% 70%;
+  }
+
+  .loader {
+   display: block;
+   margin: auto;
+  }
+
+  footer {
+   display: flex;
+   flex-direction: row;
+   justify-content: space-around;
+   align-items: center;
+   background-color: var(--main-color);
+   position: fixed;
+   bottom: 0;
+   width: 100%;
+   padding: .5rem 1rem;
+   font-size: 2rem;
+  }
+
+  footer a {
+   text-decoration: none;
+  }
+
+  /*   - - - -   Para Grid de figures   - - - - -  */
+
+  .grid-fluid {
+   display: grid;
+   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+   text-align: center;
+  }
+ </style>
+
+</head>
+
+<body>
+
+ <header class="header" data-offline>
+  <h4>Curso JavaScript</h4>
+  <h1>Pokémons API</h1>
+ </header>
+
+ <section class="plantaDev">
+  <img id="plantaDev" src="../assets/dev-plant.jpg" alt="La planta Dev">
+ </section>
+
+ <main class="grid-fluid"></main>
+
+ <footer class="links"></footer>
+
+ <script>
+  const $main = document.querySelector("main"),
+   $links = document.querySelector(".links");
+
+  async function loadPokemons(url) {
+   try {
+    $main.innerHTML = `<img class="loader" src="../assets/ball-triangle.svg" alt="Cargando...">`;
+
+    let res = await fetch(url),
+     json = await res.json(),
+     $template = "",
+     $prevLink,
+     $nextLink;
+
+    //console.log(json);
+
+    if (!res.ok) throw { status: res.status, statusText: res.statusText }
+
+    for (let i = 0; i < json.results.length; i++) {
+     //console.log(json.results[i]);
+     try {
+      let res = await fetch(json.results[i].url),
+       pokemon = await res.json();
+
+      //console.log(res, pokemon);
+
+      if (!res.ok) throw { status: res.status, statusText: res.statusText }
+
+      $template += `
+      <figure>
+       <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}">
+       <figcaption>${pokemon.name}</figcaption>
+       </figure>
+      `;
+     } catch (err) {
+      console.log(err);
+      let message = err.statusText || "Ocurrió un error";
+      $template += `<figure>
+       <figcaption>Error nº${err.status}: ${message}</figcaption>
+       </figure>`;
+     }
+    }
+
+    $main.innerHTML = $template;
+    $prevLink = json.previous ? `<a href="${json.previous}">⬅️</a>` : ""
+    $nextLink = json.next ? `<a href="${json.next}">➡️</a>` : "";
+    $links.innerHTML = $prevLink + " " + $nextLink;
+
+   } catch (err) {
+    console.log(err);
+    let message = err.statusText || "Ocurrió un error";
+    $main.innerHTML = `Error nº${err.status}: ${message}`;
+   }
+  }
+
+  document.addEventListener("DOMContentLoaded", e => loadPokemons("https://pokeapi.co/api/v2/pokemon/"));
+
+  document.addEventListener("click", e => {
+   if (e.target.matches(".links a")) {
+    e.preventDefault();
+    loadPokemons(e.target.getAttribute("href"));
+   }
+  })
+
+
+ </script>
+
+
+</body>
+
+</html>

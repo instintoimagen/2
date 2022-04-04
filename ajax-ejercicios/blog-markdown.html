@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+ <meta charset="UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Blog con Markdown y Showdown.js</title>
+</head>
+
+<body>
+
+ <h2 style="font-family: Verdana, Geneva, Tahoma, sans-serif;">Blog con Markdown y Showdown.js</h2>
+ <main> </main>
+ <!-- Traemos la librería a través del CDN de Showdown -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.0.3/showdown.min.js"></script>
+ <script>
+  const $main = document.querySelector("main");
+
+  fetch("assets/javascript.md")
+   .then(res => res.ok ? res.text() : Promise.reject(res)) // Validación. Si da ok la respuesta la transformamos a texto (no a json), porque no necesitamos la notación javascript, sino un texto interpretarlo como HTML
+   .then(text => {
+    console.log(text);
+    // Segun doc de Showdown tenemos que generar una nueva instancia del ob Converter() y luego con el método .makeHtml(md) ponerle como parámetro la var donde está el código markdown, en este caso la var text.
+    $main.innerHTML = new showdown.Converter().makeHtml(text);
+   })
+   .catch(err => {
+    console.log(err);
+    let message = err.statusText || "Ocurrió un error";
+    $main.innerHTML = `Error nº${err.status}: ${message}`;
+   })
+
+ </script>
+
+
+</body>
+
+</html>
