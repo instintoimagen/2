@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+ <meta charset="UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>API Tv Maze</title>
+
+ <style>
+  :root {
+   --title-font: "Noto Sans", sans-serif;
+   --serif-font: "Lora", serif;
+   --main-font: "Raleway", sans-serif;
+   --font-size: 15px;
+   --main-color: rgb(228, 204, 67);
+   --second-color: rgb(61, 61, 61);
+   --main-modal-color: rgba(30, 142, 247, 0.85);
+   --second-modal-color: rgba(61, 61, 61, 0.85);
+   --container-width: 1200px;
+  }
+
+  html {
+   box-sizing: border-box;
+   font-size: 16px;
+   font-family: sans-serif;
+  }
+
+  *,
+  *::before,
+  *::after {
+   box-sizing: inherit;
+  }
+
+  body {
+   margin: 0;
+   overflow-x: hidden;
+  }
+
+  .header {
+   display: flex;
+   justify-content: space-around;
+   align-items: center;
+   position: sticky;
+   z-index: 998;
+   top: 0;
+   padding: 0 0 0.5rem 0;
+   background-color: var(--main-color);
+   color: var(--second-color);
+   transition: all 0.7s ease;
+  }
+
+  .header h1 {
+   font-family: var(--title-font);
+   margin: 0 auto;
+   text-align: center;
+  }
+
+  .header h4 {
+   margin: 0 auto;
+   text-align: center;
+  }
+
+  .header img {
+   width: 6rem;
+   height: auto;
+  }
+
+  .plantaDev {
+   display: flex;
+  }
+
+  #plantaDev {
+   width: 100%;
+   max-height: 17vh;
+   object-fit: cover;
+   object-position: 50% 70%;
+  }
+
+
+  footer {
+   display: flex;
+   flex-direction: row;
+   justify-content: space-around;
+   align-items: center;
+   background-color: var(--main-color);
+   position: fixed;
+   bottom: 0;
+   width: 100%;
+   padding: .5rem 1rem;
+   font-size: 2rem;
+  }
+
+  footer a {
+   text-decoration: none;
+  }
+
+  /*   - - - -   Busqueda   - - - - -  */
+  #search {
+   display: block;
+   margin: 1.5rem auto;
+  }
+
+  .loader {
+   display: block;
+   margin: auto;
+  }
+
+  /*   - - - -   Para Grid de figures   - - - - -  */
+
+  .grid-fluid {
+   display: grid;
+   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+   text-align: center;
+  }
+
+  .show {
+   margin: 0 .5rem;
+  }
+
+  .show div {
+   text-align: left;
+  }
+
+  .show img {
+   max-width: 85%;
+  }
+ </style>
+
+</head>
+
+<body>
+
+ <header class="header" data-offline>
+  <div>
+   <h4>Curso JavaScript</h4>
+   <h1>Buscador Shows con API</h1>
+  </div>
+  <div>
+   <a href="https://www.tvmaze.com/api" target="_blank"><img src="assets/tvmaze.png" alt="logo tvmaze"></a>
+  </div>
+ </header>
+
+ <section class="plantaDev">
+  <img id="plantaDev" src="../assets/dev-plant.jpg" alt="La planta Dev">
+ </section>
+
+ <input type="search" id="search" placeholder="Buscar programas..." autocomplete="off">
+ <section id="shows" class="grid-fluid"></section>
+
+ <template id="show-template">
+  <article class="show">
+   <h3></h3>
+   <h4></h4>
+   <div></div>
+   <img> <br>
+   <a></a>
+  </article>
+ </template>
+
+
+ <script>
+
+  const $shows = document.getElementById("shows"),
+   $template = document.getElementById("show-template").content, // TEMPLATE: 1-Buscamos el elemento y lo guardamos en una var (su contenido no el template vacío, por eso el ".content"). 2-Lo clonamos y ahi lo llenamos. 3-Los clones van a un fragmento y 4-Cuando el fragmento está listo lo insertamos al DOM
+   $fragment = document.createDocumentFragment();
+
+  document.addEventListener("keypress", async e => {
+   // Fetch + Async
+   if (e.target.matches("#search")) {
+    if (e.keyCode === 13) {
+     try {
+      // Mientras esperamos la respuesta que ponga el loader.
+      $shows.innerHTML = `<img class="loader" src="../assets/ball-triangle.svg" alt="Cargando...">`
+
+
+      let query = e.target.value.toLowerCase(), // En esta var guardamos lo que ingresa el usuario y se consultará en la API. Con key y keyCode nos muestran solo teclas sueltas, con ".value" reunimos toda la palabra. La documentación nos pide forzar a minúsculas.
+       api = `https://api.tvmaze.com/search/shows?q=${query}`,
+       res = await fetch(api), // En la var "res" hacemos el pedido asíncrono a la API con el end point guardado en la var "api"
+       json = await res.json(); // Convertimos a json lo que viene en ReadableStream
+
+      console.log(json) //Para comprobar respuesta de la API
+
+      if (!res.ok) throw { status: res.status, statusText: res.statusText } // Manipulación del error, enviarlo a catch si la "res" no da "ok"
+
+      if (json.length === 0) $shows.innerHTML = `<h3>No se encontraron programas de tv con ese nombre: <mark>${query}</mark></h3>`; // La API cuando no encuentra shows devuelve un arreglo vacío, o sea de longitud cero
+
+      else {// - - - LA RESPUESTA DE LA API - - -
+
+       json.forEach(el => {
+        $template.querySelector("h3").textContent = el.show.name; // Tomamos el template, dentro hay un "h3", le ponemos el título (textContent) lo que viene en prop "show" y dentro de la prop "name". Completamos el resto del template:
+        $template.querySelector("h4").innerHTML = `Puntaje: ${(el.score * 10).toFixed(1)}`;
+        $template.querySelector("div").innerHTML = el.show.summary ? el.show.summary : "Sin descripcción"; //op ternario: si la API trae descripción en la prop "summary", que lo inserte con innerHTML; sino que ponga un texto fijo
+        $template.querySelector("img").src = el.show.image ? el.show.image.medium : "https://static.tvmaze.com/images/no-img/no-img-portrait-text.png";
+        $template.querySelector("a").href = el.show.url ? el.show.url : "";
+        $template.querySelector("a").target = el.show.url ? "_blank" : "_self";
+        $template.querySelector("a").textContent = el.show.url ? "Ver más en TvMaze" : "";
+
+        // Template completo en la primera vuelta del forEach. Lo clonamos. 
+        let $clone = document.importNode($template, true); // PARAMETROS: el nodo que clonamos y "true" para q clone el contenido también.
+
+        $fragment.appendChild($clone); // Vamos cargando de a uno en el fragmento
+       });
+       // Cuando terminó el forEach el fragmento está listo. Entonces lo agregamos en una sola iteración al DOM y quitamos el loader:
+       $shows.innerHTML = "";
+       $shows.appendChild($fragment);
+      }
+
+
+     } catch (err) {
+      console.log(err);
+      let message = err.statusText || "ocurrió un error";
+      $shows.innerHTML = `<p>Error nº${err.status}: ${message}.</p>`;
+     }
+    }
+   }
+  });
+
+
+ </script>
+
+
+</body>
+
+</html>
