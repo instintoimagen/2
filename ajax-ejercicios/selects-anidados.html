@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ <meta charset="UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Selects Anidados</title>
+
+ <style>
+  :root {
+   --title-font: "Noto Sans", sans-serif;
+   --serif-font: "Lora", serif;
+   --main-font: "Raleway", sans-serif;
+   --font-size: 15px;
+   --main-color: rgb(228, 204, 67);
+   --second-color: rgb(61, 61, 61);
+   --main-modal-color: rgba(30, 142, 247, 0.85);
+   --second-modal-color: rgba(61, 61, 61, 0.85);
+   --container-width: 1200px;
+  }
+
+  html {
+   box-sizing: border-box;
+   font-size: 16px;
+   font-family: sans-serif;
+  }
+
+  *,
+  *::before,
+  *::after {
+   box-sizing: inherit;
+  }
+
+  body {
+   margin: 0;
+   overflow-x: hidden;
+  }
+
+  .header {
+   display: block;
+   align-items: center;
+   position: sticky;
+   z-index: 998;
+   top: 0;
+   padding: 0 0 0.5rem 0;
+   background-color: var(--main-color);
+   color: var(--second-color);
+   transition: all 0.7s ease;
+  }
+
+  .header h1 {
+   font-family: var(--title-font);
+   margin: 0 auto;
+   text-align: center;
+  }
+
+  .header h4 {
+   margin: 0 auto;
+   text-align: center;
+  }
+
+  .plantaDev {
+   display: flex;
+  }
+
+  #plantaDev {
+   width: 100%;
+   max-height: 17vh;
+   object-fit: cover;
+   object-position: 50% 70%;
+  }
+
+  /*   - - - -   Selectores   - - - - -  */
+  .selector {
+   display: grid;
+   grid-template-rows: 1fr;
+   justify-items: center;
+   margin: 1.5rem .5rem;
+  }
+ </style>
+
+</head>
+
+<body>
+
+ <header class="header">
+  <h4>Curso JavaScript</h4>
+  <h1>Selects Anidados</h1>
+ </header>
+
+ <section class="plantaDev">
+  <img id="plantaDev" src="../assets/dev-plant.jpg" alt="La planta Dev">
+ </section>
+
+ <section class="selector">
+  <label for="select-primary">Provincias</label>
+  <select name="primary" id="select-primary">
+   <option value="">Seleccione provincia</option>
+  </select>
+  <p></p>
+  <label for="select-secondary">Localidad</label>
+  <select name="secondary" id="select-secondary">
+   <option value="">Seleccione localidad</option>
+  </select>
+  <p></p>
+ </section>
+
+ <script>
+
+  const $selectPrimary = document.getElementById("select-primary"),
+   $selectSecondary = document.getElementById("select-secondary");
+
+  function loadProv() {
+   fetch("https://apis.datos.gob.ar/georef/api/provincias")
+    .then(res => res.ok ? res.json() : Promise.reject(res))
+    .then(json => {
+     //console.log(json);
+     let $options = `<option value="">Seleccione provincia</option>`;
+     json.provincias.forEach(el => $options += `<option value="${el.nombre}">${el.nombre}</option>`);
+     $selectPrimary.innerHTML = $options
+    })
+    .catch(err => {
+     console.log(err);
+     let message = err.statusText || "Ocurrió un error";
+     $selectPrimary.nextElementSibling.innerHTML = `<p>Error ${err.status}: ${message}</p>`;
+    })
+  }
+
+  function loadLocal(prov) {
+   fetch(`https://apis.datos.gob.ar/georef/api/municipios?provincia=${prov}&aplanar&max=5000`)
+    .then(res => res.ok ? res.json() : Promise.reject(res))
+    .then(json => {
+     //console.log(json)
+     let $options = `<option value="">Seleccione localidad</option>`;
+     json.municipios.forEach(el => $options += `<option value="${el.nombre}">${el.nombre}</option>`);
+     $selectSecondary.innerHTML = $options
+    })
+    .catch(err => {
+     console.log(err);
+     let message = err.statusText || "Ocurrió un error";
+     $selectSecondary.nextElementSibling.innerHTML = `<p>Error ${err.status}: ${message}</p>`;
+    })
+
+  }
+
+  document.addEventListener("DOMContentLoaded", loadProv()); // No hace falta poner "e =>" ya que no manipulamos el evento, no hacen falta parámetros en esta función.
+
+  $selectPrimary.addEventListener("change", e => loadLocal(e.target.value)); // Asocio la función "loadLocal" al cambio del elemento selectPrimary. O sea cuando cargue y se modifique el listadio de provincias, que se ejecute la función que busca las localidades
+
+
+ </script>
+
+</body>
+
+</html>
