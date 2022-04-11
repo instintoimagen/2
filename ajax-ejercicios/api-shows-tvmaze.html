@@ -160,9 +160,10 @@
 
 
  <script>
+  //Técnica de TEMPLATES con forEach: t1-Buscamos el elemento y lo guardamos en una var (su contenido no el template vacío, por eso el ".content"). t2-Usando un forEach (dentro del forEach) completamos el template con lo que viene en el primer elemento del arreglo. t3-Lo clonamos para volver a utilizar el template (importNode con template y true), y ahi lo llenamos con el resto del arreglo (vueltas del forEach). t4-Los clones van a un fragmento. t5- Fuera del forEach: El fragmento está listo lo insertamos al DOM.
 
   const $shows = document.getElementById("shows"),
-   $template = document.getElementById("show-template").content, // TEMPLATE: 1-Buscamos el elemento y lo guardamos en una var (su contenido no el template vacío, por eso el ".content"). 2-Lo clonamos y ahi lo llenamos. 3-Los clones van a un fragmento y 4-Cuando el fragmento está listo lo insertamos al DOM
+   $template = document.getElementById("show-template").content, //t1
    $fragment = document.createDocumentFragment();
 
   document.addEventListener("keypress", async e => {
@@ -188,7 +189,7 @@
       else {// - - - LA RESPUESTA DE LA API - - -
 
        json.forEach(el => {
-        $template.querySelector("h3").textContent = el.show.name; // Tomamos el template, dentro hay un "h3", le ponemos el título (textContent) lo que viene en prop "show" y dentro de la prop "name". Completamos el resto del template:
+        $template.querySelector("h3").textContent = el.show.name; //t2: Dentro del forEach: Tomamos la var $template, dentro hay un "h3", le ponemos el título (textContent) lo que viene en prop "show" y dentro de la prop "name". Completamos el resto del template:
         $template.querySelector("h4").innerHTML = `Puntaje: ${(el.score * 10).toFixed(1)}`;
         $template.querySelector("div").innerHTML = el.show.summary ? el.show.summary : "Sin descripcción"; //op ternario: si la API trae descripción en la prop "summary", que lo inserte con innerHTML; sino que ponga un texto fijo
         $template.querySelector("img").src = el.show.image ? el.show.image.medium : "https://static.tvmaze.com/images/no-img/no-img-portrait-text.png";
@@ -196,14 +197,14 @@
         $template.querySelector("a").target = el.show.url ? "_blank" : "_self";
         $template.querySelector("a").textContent = el.show.url ? "Ver más en TvMaze" : "";
 
-        // Template completo en la primera vuelta del forEach. Lo clonamos. 
+        //t3: Template completo en la primera vuelta del forEach. Lo clonamos. 
         let $clone = document.importNode($template, true); // PARAMETROS: el nodo que clonamos y "true" para q clone el contenido también.
 
-        $fragment.appendChild($clone); // Vamos cargando de a uno en el fragmento
+        $fragment.appendChild($clone); //t4: Vamos cargando de a uno en el fragmento
        });
-       // Cuando terminó el forEach el fragmento está listo. Entonces lo agregamos en una sola iteración al DOM y quitamos el loader:
-       $shows.innerHTML = "";
-       $shows.appendChild($fragment);
+
+       $shows.innerHTML = "";//quitamos loader
+       $shows.appendChild($fragment);//t5: Cuando terminó el forEach el fragmento está listo. Entonces lo agregamos en una sola iteración al DOM
       }
 
 

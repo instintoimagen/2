@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ <meta charset="UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Indice Temas por Ejercicio | Curso JavaScript
+ </title>
+
+ <style>
+  :root {
+   --title-font: "Noto Sans", sans-serif;
+   --serif-font: "Lora", serif;
+   --main-font: "Raleway", sans-serif;
+   --font-size: 15px;
+   --main-color: rgb(66, 152, 250);
+   --second-color: rgb(61, 61, 61);
+   --main-modal-color: rgba(66, 152, 250, 0.85);
+   --second-modal-color: rgba(61, 61, 61, 0.85);
+   --container-width: 1200px;
+  }
+
+  html {
+   box-sizing: border-box;
+   font-size: 16px;
+   font-family: sans-serif;
+  }
+
+  *,
+  *::before,
+  *::after {
+   box-sizing: inherit;
+  }
+
+  body {
+   margin: 0;
+   overflow-x: hidden;
+  }
+
+  .header {
+   display: block;
+   align-items: center;
+   position: sticky;
+   z-index: 998;
+   top: 0;
+   padding: 0 0 0.5rem 0;
+   background-color: var(--main-color);
+   color: var(--second-color);
+   transition: all 0.7s ease;
+  }
+
+  .header h2 {
+   font-family: var(--title-font);
+   margin: 0 auto;
+   text-align: center;
+  }
+
+  .header h4 {
+   margin: 0 auto;
+   text-align: center;
+  }
+
+  .plantaDev {
+   display: flex;
+  }
+
+  #plantaDev {
+   width: 100%;
+   max-height: 17vh;
+   object-fit: cover;
+   object-position: 50% 70%;
+  }
+
+  footer {
+   display: flex;
+   flex-direction: row;
+   justify-content: space-around;
+   align-items: center;
+   background-color: var(--main-color);
+   position: fixed;
+   bottom: 0;
+   width: 100%;
+   padding: .5rem 1rem;
+   font-size: 1.5rem;
+  }
+
+  /*   - - - -   Selectores   - - - - -  */
+  .selector {
+   display: grid;
+   grid-template-rows: 1fr;
+   justify-items: center;
+   margin: 1.5rem .5rem;
+  }
+
+  /* - - - - - Search Filters  - - - - - -  */
+
+  .cards {
+   display: grid;
+   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+
+  .card {
+   background-color: var(--second-color);
+   color: var(--main-color);
+   transition: all 0.5s ease-out;
+   margin: 1.5rem;
+  }
+
+  .card img {
+   width: 100%;
+   height: auto;
+  }
+
+  .card figcaption {
+   padding: 1rem;
+   font-size: 1rem;
+   background-color: var(--second-color);
+   text-align: center;
+
+  }
+
+  .card figcaption a {
+   color: #fff;
+   text-decoration: none;
+   font-size: 1.25rem;
+  }
+ </style>
+
+</head>
+
+<body>
+
+ <header class="header">
+  <h4>Curso JavaScript</h4>
+  <h2>Indice Temas por Ejercicio</h2>
+ </header>
+
+ <section class="plantaDev">
+  <img id="plantaDev" src="../assets/dev-plant.jpg" alt="La planta Dev">
+ </section>
+
+ <main>
+  <article class="cards">
+   <figure class="card">
+    <img src="assets/screenshots/api-canciones.jpg" alt="Api Canciones">
+    <figcaption><a href="api-canciones.html" target="_blank">Api Canciones</a></figcaption>
+    <h4>Técnicas usadas:</h4>
+    <ul>Fetch + Async await</ul>
+    <ul>Templates iniciados vacíos</ul>
+    <ul>Promise.all([,])</ul>
+   </figure>
+
+   <figure class="card">
+    <img src="assets/screenshots/api-pokemon.jpg" alt="Api Pokemos">
+    <figcaption><a href="api-pokemon.html" target="_blank">Api Pokémons</a></figcaption>
+    <h4>Técnicas usadas:</h4>
+    <ul></ul>
+    <ul>Templates iniciados vacíos</ul>
+    <ul>Figures con for</ul>
+    <ul>Botones para pasar página</ul>
+   </figure>
+
+   <figure class="card">
+    <img src="assets/screenshots/api-shows-tvmaze.jpg" alt="Api ShowsTvMaze">
+    <figcaption><a href="api-shows-tvmaze.html" target="_blank">Api Programas Tv Maze</a></figcaption>
+    <h4>Técnicas usadas:</h4>
+    <ul>Fetch + Async await</ul>
+    <ul>Template con contenido, forEach y clone. //Explicado en detalle en comentarios</ul>
+   </figure>
+
+   <figure class="card">
+    <img src="assets/screenshots/blog-con-Md.jpg" alt="Blog con markdown">
+    <figcaption><a href="blog-markdown.html" target="_blank">Blog con MarkDown</a></figcaption>
+    <h4>Técnicas usadas:</h4>
+    <ul>Fetch</ul>
+    <ul>Librería Showdown via CDN</ul>
+   </figure>
+
+   <figure class="card">
+    <img src="assets/screenshots/form-fetch-php.jpg" alt="form fetch php">
+    <figcaption><a href="contact-form-php.html" target="_blank">Envío de Form php</a></figcaption>
+    <h4>Técnicas usadas:</h4>
+    <ul>Fetch método POST</ul>
+    <ul>php</ul>
+    <ul>valid form con pattern</ul>
+    <ul></ul>
+   </figure>
+
+   <figure class="card">
+    <img src="assets/screenshots/form-fetch-formsubmit.jpg" alt="form fetch form submit">
+    <figcaption><a href="contact-form.html" target="_blank">Envío de Form con FormSubmit</a></figcaption>
+    <h4>Técnicas usadas:</h4>
+    <ul>Fetch método POST</ul>
+    <ul>FormSubmit</ul>
+    <ul>valid form con pattern</ul>
+   </figure>
+
+   <figure class="card">
+    <img src="assets/screenshots/incluir-html.jpg" alt="incluir-html">
+    <figcaption><a href="incluir-html.html" target="_blank">Incluir HTML cont sitio</a></figcaption>
+    <h4>Técnicas usadas:</h4>
+    <ul>AJAX</ul>
+    <ul>Header y footer también traidos con Ajax</ul>
+   </figure>
+
+   <figure class="card">
+    <img src="assets/screenshots/sitio-ajax.jpg" alt="Sitio Ajax">
+    <figcaption><a href="sitio-ajax.html" target="_blank">Sitio Ajax</a></figcaption>
+    <h4>Técnicas usadas:</h4>
+    <ul>AJAX</ul>
+    <ul>Contenido main dinámico</ul>
+    <ul>Header y footer fijos</ul>
+   </figure>
+
+   <figure class="card">
+    <img src="assets/screenshots/select-anidados.jpg" alt="Selectores anidados">
+    <figcaption><a href="selects-anidados.html" target="_blank">Selectores anindados</a></figcaption>
+    <h4>Técnicas usadas:</h4>
+    <ul>Fetch</ul>
+    <ul>forEach para completar options de inputs</ul>
+    <ul>listener "change" para segundo selector</ul>
+   </figure>
+
+   <figure class="card">
+    <img src="assets/screenshots/uploader.jpg" alt="Cargador">
+    <figcaption><a href="uploader.html" target="_blank">Cargador con barra progress</a></figcaption>
+    <h4>Técnicas usadas:</h4>
+    <ul>Ajax</ul>
+    <ul>Método POST para enviar archivo</ul>
+    <ul>Objeto FileReader()</ul>
+    <ul>Listener "loadend" para ubicación definitiva del archivo</ul>
+    <ul>Listener "progress" para indicar carga</ul>
+   </figure>
+
+   <figure class="card">
+    <img src="assets/screenshots/uploader-dnd.jpg" alt="Cargador drag and drop">
+    <figcaption><a href="uploader-drag-and-drop.html" target="_blank">Cargador drag and drop</a></figcaption>
+    <h4>Técnicas usadas:</h4>
+    <ul>Lo anterior más:</ul>
+    <ul>Listeners "dragover" "dragleave" y "drop" para hacer que sea arrastrable la carga.</ul>
+   </figure>
+
+   <figure class="card">
+    <img src="assets/screenshots/uploader-completo.jpg" alt="Cargador completo">
+    <figcaption><a href="uploader-dyf.html" target="_blank">Cargador d&d y form</a></figcaption>
+    <h4>Técnicas usadas:</h4>
+    <ul>Combinación anteriores cargadores</ul>
+   </figure>
+
+   <figure class="card">
+    <img src="assets/screenshots/zz" alt="zz">
+    <figcaption><a href="zz" target="_blank">API WordPress</a></figcaption>
+    <h4>Técnicas usadas:</h4>
+    <ul></ul>
+   </figure>
+
+
+  </article>
+ </main>
+
+ <footer>Contenido del footer</footer>
+
+
+</body>
+
+</html>
