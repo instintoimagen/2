@@ -210,12 +210,16 @@
    $loader = document.querySelector(".loader"),
    $template = document.getElementById("post-template").content, //Nos interesa hacer referencia al contenido (por eso el .content), y no solo la ref al nodo.
    $fragment = document.createDocumentFragment(),
-   DOMAIN = "https://malvestida.com",
+   DOMAIN = "https://css-tricks.com",
    SITE = `${DOMAIN}/wp-json`,
    API_WP = `${SITE}/wp/v2`,
    POSTS = `${API_WP}/posts?_embed`, //Utilizamos "_embed": Para no hacer peticiones para las imágenes, autores, categorías y etiquetas. Cuando ponemos "?" significa que pasamos una variable, la var es "_embed"
    PAGES = `${API_WP}/pages`,
    CATEGORIES = `${API_WP}/categories`;
+
+  //Scroll Infinito: para API wordpress listo!  Para otras APIs ver documentación para saber cómo pedir las páginas siguientes, cantidad que se muestran por página, etc.
+  let page = 1, //InfiniteScroll: me cargará los post de la primer página
+   perPage = 5; //Cargará 5 post porPágina, en lugar de los 10 predefinidos
 
 
   function getSiteData() {
@@ -240,19 +244,19 @@
 
   function getPosts() {
    $loader.style.display = "block",
-    fetch(POSTS)
+    fetch(`${POSTS}&page=${page}&per_page=${perPage}`) //InfiniteScroll
      .then(res => res.ok ? res.json() : Promise.reject(res))
      .then(json => {
       console.log(json)
 
       json.forEach(el => {
-       $template.querySelector(".post-image").src = el._embedded["wp:featuredmedia"][0].source_url || el.yoast_head_json.og_image[0].url; //Notacion de objetos para sanar el problema de los ":" pongo corchetes y comillas, no necesito el punto antes de esto
+       $template.querySelector(".post-image").src = el._embedded["wp:featuredmedia"] ? el._embedded["wp:featuredmedia"][0].source_url : ""; //Notacion de objetos para sanar el problema de los ":" pongo corchetes y comillas, no necesito el punto antes de esto
        $template.querySelector(".post-image").alt = el.title.rendered;
        $template.querySelector(".post-title").innerHTML = el.title.rendered;
        $template.querySelector(".post-autor").innerHTML = `
        <a href="${el._embedded.author[0].link}" target="_blank">
-       <img src="${el._embedded.author[0].yoast_head_json.og_image[0].url}" alt="${el._embedded.author[0].yoast_head_json.og_title}">
-       <figcaption>${el._embedded.author[0].yoast_head_json.og_title}</figcaption>
+       <img src="${el._embedded.author[0].avatar_urls[48] || el._embedded.author[0].yoast_head_json.og_image[0].url}" alt="${el._embedded.author[0].name}">
+       <figcaption>${el._embedded.author[0].name}</figcaption>
        </a>
        `;
        $template.querySelector(".post-date").innerHTML = `Publicado el: ${new Date(el.date).toLocaleDateString()}`;
@@ -308,6 +312,22 @@
   document.addEventListener("DOMContentLoaded", e => {
    getSiteData();
    getPosts();
+  })
+
+  window.addEventListener("scroll", e => {
+   //Para el scroll Infinito tenemos que detectar el final de la página, (comparar con la barra de desplazamiento). Ahí se dispara el evento y hace la petición para cargar más elementos en la página.
+
+   //Necesitamos obtener 3 propiedades que cuelgan de la etiqueta <html> scrollTop (refiere el desplazamiento vertical que hace el usuario, aumenta cuando escroleamos hacia abajo), clientHeight (altura de la ventana del navegador, viewport), y scrollHeight (el total que puedo escrolear, total cargado hasta el momento)
+   const { scrollTop, clientHeight, scrollHeight } = document.documentElement //Desestructuración usando {} para declarar variables contenidas en documentElement. Simplifica la escritura de código. En lugar de escribir const scrollTop = document.DocumentElement.scrollTop
+
+   //console.log(scrollTop, clientHeight, scrollHeight) //Ver valores
+
+   if (scrollTop + clientHeight + 100 >= scrollHeight) { //Si lo que escrolea el usuario, más el alto del viewport, es mayor o igual al total que puede escrolear ejecutará el código (El +100 es para ajustar si al llegar al final no recarga en distintos navegadores o dispositivos).
+
+    page++; //InfScrll: sumo uno a la página y luego me recarga con getPosts(), entonces carga los posts de las páginas 2, 3, 4, etc...
+
+    getPosts() //Recarga
+   }
   })
 
 
