@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+ <meta charset="UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+ <!-- Google Fonts -->
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Lora&family=Raleway:ital,wght@0,400;1,700&display=swap"
+  rel="stylesheet">
+
+ <title>WordPress Rest API</title>
+
+ <style>
+  :root {
+   --title-font: "Lora", serif;
+   --main-font: "Raleway", sans-serif;
+   --font-size: 18px;
+   --main-color: rgb(224, 165, 98);
+   --second-color: rgb(61, 61, 61);
+   --main-modal-color: rgba(238, 120, 74, 0.85);
+   --second-modal-color: rgba(61, 61, 61, 0.85);
+   --container-width: 1200px;
+  }
+
+  html {
+   box-sizing: border-box;
+   font-size: var(--font-size);
+   font-family: var(--main-font);
+  }
+
+  *,
+  *::before,
+  *::after {
+   box-sizing: inherit;
+  }
+
+  a {
+   color: rgb(23, 51, 77);
+   transition: all .3s ease-in-out;
+   text-decoration: none;
+  }
+
+  a:hover {
+   opacity: .5;
+  }
+
+  body {
+   margin: 0;
+   overflow-x: hidden;
+  }
+
+  .header {
+   display: block;
+   align-items: center;
+   position: sticky;
+   z-index: 998;
+   top: 0;
+   padding: 0 0 0.5rem 0;
+   background-color: var(--main-color);
+   color: var(--second-color);
+   transition: all 0.7s ease;
+  }
+
+  .header h2 {
+   font-family: var(--title-font);
+   margin: 0 auto;
+   text-align: center;
+  }
+
+  .header h4 {
+   margin: 0 auto;
+   text-align: center;
+  }
+
+  .plantaDev {
+   display: flex;
+  }
+
+  #plantaDev {
+   width: 100%;
+   max-height: 17vh;
+   object-fit: cover;
+   object-position: 50% 70%;
+  }
+
+  /*  - - - Loader - - -  */
+
+  .loader {
+   display: none;
+   margin: 2rem auto;
+  }
+
+  /*   - - - -   Selectores   - - - - -  */
+  .selector {
+   display: grid;
+   grid-template-rows: 1fr;
+   justify-items: center;
+   margin: 1.5rem .5rem;
+  }
+
+  .form-selec {
+   display: grid;
+   grid-template-rows: 1fr;
+   max-width: fit-content;
+   justify-items: center;
+   margin: 1rem auto .5rem;
+   padding: 1rem 2rem;
+   background-color: var(--second-color);
+   border-radius: 15px;
+  }
+
+  /*   - - - -   Traido del wp   - - - - -  */
+
+  h1 {
+   text-align: center;
+  }
+
+  .site {
+   display: grid;
+   align-self: center;
+   justify-items: center;
+   max-width: fit-content;
+   background-color: var(--main-color);
+   padding: 0 1.5rem 1rem 1.5rem;
+   margin: .5rem auto 1rem;
+   border-radius: 25px;
+  }
+
+  .post {
+   margin: 1rem auto;
+   padding: 1rem;
+   border-radius: .5rem;
+   max-width: 98%;
+   background-color: #eceff1;
+  }
+
+  .post-image {
+   max-width: 100%;
+  }
+
+  .post-autor {
+   display: flex;
+   flex-direction: row-reverse;
+   align-items: center;
+
+  }
+
+  .post-autor img {
+   max-width: 40px;
+   border-radius: 15px;
+  }
+
+  .post-link,
+  .post-date {
+   display: block;
+   text-align: right;
+  }
+
+  .post-content>article {
+   padding: 1rem;
+  }
+
+  .post-content>article img {
+   max-width: 100%;
+   height: auto;
+  }
+ </style>
+
+</head>
+
+<body>
+
+ <header class="header">
+  <h4>Curso JavaScript</h4>
+  <h2>WordPress Rest API</h2>
+ </header>
+
+ <section class="plantaDev">
+  <img id="plantaDev" src="../assets/dev-plant.jpg" alt="La planta Dev">
+ </section>
+
+ <section class="form-selec">
+  <form id="domain">
+   <input name="inputDomain" type="url" placeholder="ingrese sitio wordpress" required>
+   <input type="submit">
+  </form>
+ </section>
+
+ <article id="site" class="site"></article>
+ <section id="posts" class="posts"></section>
+ <img class="loader" src="../assets/ball-triangle.svg" alt="cargando...">
+ <template id="post-template">
+  <article class="post">
+   <img class="post-image">
+   <aside>
+    <h2 class="post-title"></h2>
+    <figure class="post-autor"></figure>
+    <small class="post-date"></small>
+    <p class="post-excerpt"></p>
+    <div class="post-categories"></div>
+    <div class="post-tags"></div>
+    <hr>
+    <details class="post-content">
+     <summary>Ver aquí la publicación completa</summary>
+     <article></article>
+    </details>
+    <a class="post-link" target="_blank">Ver publicación en sitio original</a>
+   </aside>
+  </article>
+ </template>
+
+
+ <script>
+
+
+  //Para que el usuario seleccione un sitio de wordpress. Ver donde ejecutar las funciones: getSiteData() y getPosts()
+
+  let inputDomain; //Var que guarda el sitio ingresado por el usuario
+
+  const $form = document.getElementById("domain"); //Para el input que permite ingresar el sitio al usuario.
+
+  function inDomain(form) {
+   document.addEventListener("submit", e => {
+    if (e.target === $form) {
+     e.preventDefault();
+     inputDomain = $form.inputDomain.value;
+     console.log(inputDomain);
+
+
+     const $site = document.getElementById("site"),
+      $posts = document.getElementById("posts"),
+      $loader = document.querySelector(".loader"),
+      $template = document.getElementById("post-template").content, //Nos interesa hacer referencia al contenido (por eso el .content), y no solo la ref al nodo.
+      $fragment = document.createDocumentFragment(),
+      DOMAIN = inputDomain,
+      SITE = `${DOMAIN}/wp-json`,
+      API_WP = `${SITE}/wp/v2`,
+      POSTS = `${API_WP}/posts?_embed`, //Utilizamos "_embed": Para no hacer peticiones para las imágenes, autores, categorías y etiquetas. Cuando ponemos "?" significa que pasamos una variable, la var es "_embed"
+      PAGES = `${API_WP}/pages`,
+      CATEGORIES = `${API_WP}/categories`;
+
+     //Scroll Infinito: para API wordpress listo!  Para otras APIs ver documentación para saber cómo pedir las páginas siguientes, cantidad que se muestran por página, etc.
+     let page = 1, //InfiniteScroll: me cargará los post de la primer página
+      perPage = 5; //Cargará 5 post porPágina, en lugar de los 10 predefinidos
+
+
+     function getSiteData() {
+      fetch(SITE)
+       .then(res => res.ok ? res.json() : Promise.reject(res))
+       .then(json => {
+        console.log(json);
+        $site.innerHTML = `
+     <h3>
+      <a href="${json.url}" target="_blank" style="text-decoration: none">Sitio Web: ${json.name}</a>
+      </h3>
+      <small>Zona horaria: ${json.timezone_string}</small>
+     `;
+       })
+       .catch((err) => {
+        console.log(err);
+        let message = err.statusText || "Ocurrió un error";
+        $site.innerHTML = `<p>Error nº${err.status}: ${message}</p>`;
+       })
+     }
+
+
+     function getPosts() {
+      $loader.style.display = "block",
+       fetch(`${POSTS}&page=${page}&per_page=${perPage}`) //InfiniteScroll
+        .then(res => res.ok ? res.json() : Promise.reject(res))
+        .then(json => {
+         console.log(json)
+
+         json.forEach(el => {
+          $template.querySelector(".post-image").src = el._embedded["wp:featuredmedia"] ? el._embedded["wp:featuredmedia"][0].source_url : ""; //Notacion de objetos para sanar el problema de los ":" pongo corchetes y comillas, no necesito el punto antes de esto
+          $template.querySelector(".post-image").alt = el.title.rendered;
+          $template.querySelector(".post-title").innerHTML = el.title.rendered;
+          $template.querySelector(".post-autor").innerHTML = `
+       <a href="${el._embedded.author[0].link}" target="_blank">
+       <img src="${el._embedded.author[0].avatar_urls ? el._embedded.author[0].avatar_urls[48] : el._embedded.author[0].yoast_head_json.og_image[0].url}" alt="${el._embedded.author[0].name}">
+       <figcaption>${el._embedded.author[0].name}</figcaption>
+       </a>
+       `;
+          $template.querySelector(".post-date").innerHTML = `Publicado el: ${new Date(el.date).toLocaleDateString()}`;
+          $template.querySelector(".post-link").href = `${el.link}`;
+          $template.querySelector(".post-excerpt").innerHTML = `${el.excerpt.rendered.replace("[&hellip;]", "...")}`; //El replace() es para cambiar los corchetes con puntos suspensivos, que nos da wp en en excerpt, por simplemente puntos suspensivos.
+
+
+          //Categorías y Etiquetas
+          //A continuación creamos variables, y hacemos este recorrido con el forEach (*recorrido) para completar los list item <li> dentro del arreglo, que nos devuelve la API de wp, que en su posición [0] trae categorías, y en la [1] las etiquetas. Si ubiera más taxonomías seguir con las posiciones [2] [3] etc.
+          let categories = "",
+           tags = "";
+          el._embedded["wp:term"][0].forEach(el => categories += `<a href="${el.link}" target="_blank">
+        <li>${el.name}</li>
+        </a>
+       `); //* recorrido
+          el._embedded["wp:term"][1].forEach(el => tags += `
+       <a href="${el.link}" target="_blank">
+        <li>${el.name}</li>
+        </a>
+       `); //* recorrido
+
+          //Luego de hacer los recorridos imprimimos con innerHTML
+          $template.querySelector(".post-categories").innerHTML = `<p>
+        Categorías:</p>
+        <ul>${categories}</ul>
+      `;
+          $template.querySelector(".post-tags").innerHTML = `<p>
+        Etiquetas:</p>
+        <ul>${tags}</ul>
+      `;
+
+
+          $template.querySelector(".post-content > article").innerHTML = el.content.rendered;
+
+
+
+          let $clone = document.importNode($template, true);
+          $fragment.appendChild($clone);
+         });
+         $posts.appendChild($fragment);
+         $loader.style.display = "none";
+
+
+        })
+        .catch((err) => {
+         console.log(err);
+         let message = err.statusText || "Ocurrió un error";
+         $posts.innerHTML = `<p>Error nº${err.status}: ${message}</p>`;
+         $loader.style.display = "none";
+        })
+     }
+
+     window.addEventListener("scroll", e => {
+      //Para el scroll Infinito tenemos que detectar el final de la página, (comparar con la barra de desplazamiento). Ahí se dispara el evento y hace la petición para cargar más elementos en la página.
+
+      //Necesitamos obtener 3 propiedades que cuelgan de la etiqueta <html> scrollTop (refiere el desplazamiento vertical que hace el usuario, aumenta cuando escroleamos hacia abajo), clientHeight (altura de la ventana del navegador, viewport), y scrollHeight (el total que puedo escrolear, total cargado hasta el momento)
+      const { scrollTop, clientHeight, scrollHeight } = document.documentElement //Desestructuración usando {} para declarar variables contenidas en documentElement. Simplifica la escritura de código. En lugar de escribir const scrollTop = document.DocumentElement.scrollTop
+
+      //console.log(scrollTop, clientHeight, scrollHeight) //Ver valores
+
+      if (scrollTop + clientHeight + 70 >= scrollHeight) { //Si lo que escrolea el usuario, más el alto del viewport, es mayor o igual al total que puede escrolear ejecutará el código (El +100 es para ajustar si al llegar al final no recarga en distintos navegadores o dispositivos).
+
+       page++; //InfScrll: sumo uno a la página y luego me recarga con getPosts(), entonces carga los posts de las páginas 2, 3, 4, etc...
+
+       getPosts() //Recarga
+      }
+     })
+
+
+     getSiteData();
+     getPosts()
+
+    }
+   }
+   )
+  }
+
+
+
+  document.addEventListener("DOMContentLoaded", e => {
+   inDomain();
+  })
+
+
+// -------------------------------------
+
+
+
+
+
+
+
+ </script>
+
+
+</body>
+
+</html>
