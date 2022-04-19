@@ -125,6 +125,11 @@
    text-decoration: none;
    font-size: 1.25rem;
   }
+
+  .card h4,
+  .card ul {
+   padding: 0 .5rem;
+  }
  </style>
 
 </head>
@@ -142,6 +147,18 @@
 
  <main>
   <article class="cards">
+
+   <figure class="card">
+    <img src="assets/screenshots/spa.jpg" alt="Single Page Aplication">
+    <figcaption><a href="spa/index.html" target="_blank">Single Page Aplication</a></figcaption>
+    <h4>Técnicas usadas:</h4>
+    <ul>Códigos html devueltos por función (con forEach) se reúnen (concatenan +=) en una variable y luego se pegan en
+     el DOM. No usa Template</ul>
+    <ul>AJAX en una función</ul>
+    <ul>Contenido 100% dinámico</ul>
+    <ul>Scripts en módulos</ul>
+   </figure>
+
    <figure class="card">
     <img src="assets/screenshots/api-canciones.jpg" alt="Api Canciones">
     <figcaption><a href="api-canciones.html" target="_blank">Api Canciones</a></figcaption>

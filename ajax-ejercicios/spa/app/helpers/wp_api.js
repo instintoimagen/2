@@ -17,3 +17,5 @@ export default {
   CATEGORIES,
   SEARCH,
 };
+
+// https://developer.wordpress.org/rest-api/
