@@ -6,6 +6,8 @@ export function Menu() {
 <span></span>
 <a href="#/search">Búsqueda</a>
 <span></span>
+<a href="#/contacto">Contacto</a>
+<span></span>
 <a href="https://aplitivo.com" target="_blank" rel="noopener">Aplitivo</a>
 `;
 
