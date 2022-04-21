@@ -42,6 +42,14 @@ img {
   background-color: #dc3545;
 }
 
+.error mark {
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  display: inline-block;
+  color: #fff;
+  background-color: #eecb5ac5;
+}
+
 .search-form {
   margin: auto;
   text-align: center;

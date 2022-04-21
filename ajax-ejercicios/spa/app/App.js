@@ -2,6 +2,7 @@ import { Header } from "./components/Header.js";
 import { Main } from "./components/Main.js";
 import { Loader } from "./components/Loader.js";
 import { Router } from "./components/Router.js";
+import { InfiniteScroll } from "./helpers/infinite_scroll.js";
 
 export function App() {
   const $root = document.getElementById("root");
@@ -13,10 +14,11 @@ export function App() {
   $root.appendChild(Loader());
 
   Router(); //Componente que genera el contenido (de acuerdo a la interacción del usuario en el menú), para Home hace la petición AJAX para traer el contenido de la API de WordPress
+
+  InfiniteScroll();
 }
 
 /*     - - - -  Version Anterior   - - - - 
-
 //$post cambió a $main
 
 export function App() {
