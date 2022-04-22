@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+ <meta charset="UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Reactividad - Estado Inmutable</title>
+</head>
+
+<body>
+
+ <h1>Estado Inmutable - Lista de tareas</h1>
+
+ <form id="todo-form">
+  <input type="text" id="todo-item" placeholder="Tarea por hacer">
+  <input type="submit" value="Agregar">
+ </form>
+ <h2>Lista de Tareas</h2>
+ <ul id="todo-list"></ul>
+
+ <script>
+
+  //El State
+  const state = {
+   todoList: [],
+   nombre: ""
+  }
+
+  //Template UI
+  const template = () => {
+   if (state.todoList.length < 1) return `<p><em>Lista vacía</em></p>`;
+   //Va a interactuar con la propiedad todoList (el arreglo) y por cada elemento que tenga me genera una <li>
+
+   let todos = state.todoList.map(item => `<li>${item}</li>`).join("") //con el método funcional map vamos a recorrer el todoList, y por cada item, nos retorne una <li> con el item dentro. Esto imprimiría el signo coma "," para evitarlo usamos el método .join("") para unirlos con espacio vacío. Agrupamos en la var todos
+
+   return todos;
+  }
+
+  //Render UI - Pinta en base a los cambios de estado
+  const render = () => {
+   console.log(state);
+   const $list = document.getElementById("todo-list");
+   if (!$list) return;
+   $list.innerHTML = template();
+  }
+
+  //Actualizar el state de forma REACTIVA
+  const setState = obj => {
+   //La función setState() nos sirve de intermediario para no actualizar directamente el objeto state. Recibe un objeto, recorre las llaves, y cuando alguna llave coincida con las del objeto state original la actualiza.
+   for (let key in obj) {
+    if (state.hasOwnProperty(key)) {
+     state[key] = obj[key] //Comparamos llaves con método .hasOwnProperty() y si encuentra asigna la del obj entonces se actualiza
+    }
+   }
+   render();
+  }
+
+  //Obtener una copia INMUTABLE del state
+  const getState = () => JSON.parse(JSON.stringify(state)) //tomo el objeto state, lo convierto a cadena de texto json, (ya es copia independiente), y luego lo vuelvo a hacer objeto con .parse
+
+  const items = getState(); //getState es solo una copia de state
+  items.todoList.push("Tarea 4")
+  console.log("Estado InMutable", state)
+
+
+
+
+  document.addEventListener("submit", e => {
+   if (!e.target.matches("#todo-form")) return false;
+   e.preventDefault();
+
+   const $item = document.getElementById("todo-item");
+   if (!$item) return;
+
+   //Actualizar el State y la UI, forma REACTIVA
+   const lastState = getState()
+   lastState.todoList.push($item.value) //le agregamos otro elemento a la copia del estado.
+   setState({ todoList: lastState.todoList });
+
+   //Limpiar input
+   $item.value = "";
+   $item.focus();
+  })
+
+  //la función render se ejecutará a la carga del DOM y cuando cambie el estado.
+  document.addEventListener("DOMContentLoaded", render)
+
+  //Estableciendo valores por defecto al State
+  setState({
+   todoList: ["Tarea 1", "Tarea 2", "Tarea 3"],
+   nombre: "Sergio"
+  })
+
+
+
+  document.getElementById("todo-item").autocomplete = "off";
+
+
+ </script>
+
+</body>
+
+</html>

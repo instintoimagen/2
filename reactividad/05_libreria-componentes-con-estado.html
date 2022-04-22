@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+ <meta charset="UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Reactividad - Libreria con componentes con Estados</title>
+
+ <style>
+  :root {
+   --title-font: "Noto Sans", sans-serif;
+   --serif-font: "Lora", serif;
+   --main-font: "Raleway", sans-serif;
+   --font-size: 15px;
+   --main-color: rgb(199, 199, 199);
+   --second-color: rgb(42, 50, 71);
+   --main-modal-color: rgba(30, 142, 247, 0.85);
+   --second-modal-color: rgba(61, 61, 61, 0.85);
+   --container-width: 1200px;
+  }
+
+  html {
+   box-sizing: border-box;
+   font-family: sans-serif;
+   font-size: 16px;
+   background-color: rgb(36, 36, 36);
+   color: var(--main-color)
+  }
+
+  *,
+  *:after,
+  *:before {
+   box-sizing: inherit;
+  }
+
+  body {
+   margin: 0;
+   overflow-x: hidden;
+  }
+
+  h1 {
+   text-align: center;
+  }
+
+  main {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   text-align: center;
+   min-height: 50vh;
+  }
+
+  .list {
+   display: grid;
+   grid-template-rows: auto;
+   justify-items: left;
+   background-color: var(--second-color);
+   padding: 2rem;
+   margin: 1rem 0.5rem;
+   border-radius: 10px;
+  }
+ </style>
+
+</head>
+
+<body>
+
+ <h1>Libreria con componentes con estados - Lista de tareas</h1>
+ <main>
+  <section class="list">
+   <form id="todo-form">
+    <input type="text" id="todo-item" placeholder="Tarea por hacer">
+    <input type="submit" value="Agregar">
+    <h2>Lista de Tareas</h2>
+   </form>
+   <ul id="todo-list"></ul>
+  </section>
+ </main>
+
+ <script src="Component.js"></script>
+ <script>
+
+  const app = new Component({
+   el: "#todo-list",
+   data: {
+    todoList: []
+   },
+   template: function (props) {
+    if (props.todoList.length < 1) return `<p><em>Lista vacía</em></p>`;
+
+    let todos = props.todoList.map(item => `<li>${item}</li>`).join("")
+
+    return todos;
+   }
+  })
+
+
+  document.addEventListener("submit", e => {
+   if (!e.target.matches("#todo-form")) return false;
+   e.preventDefault();
+
+   const $item = document.getElementById("todo-item");
+   if (!$item) return;
+
+   //Actualizar el State y la UI, forma REACTIVA
+   const lastState = app.getState()
+   lastState.todoList.push($item.value) //le agregamos otro elemento a la copia del estado.
+   app.setState({ todoList: lastState.todoList });
+
+   //Limpiar input
+   $item.value = "";
+   $item.focus();
+  })
+
+  //la función render se ejecutará a la carga del DOM y cuando cambie el estado, setState() dentro del evento submit 
+  document.addEventListener("DOMContentLoaded", app.render)
+
+  //Estableciendo valores por defecto al State
+  /* app.setState({
+   todoList: ["Tarea 1 Jugar con Joaquín", "Tarea 2 Compartir con Noe", "Tarea 3 Estudiar y trabajar"]
+  }) */
+
+
+
+  document.getElementById("todo-item").autocomplete = "off";
+
+
+ </script>
+
+</body>
+
+</html>

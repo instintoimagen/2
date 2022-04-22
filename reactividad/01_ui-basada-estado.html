@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+ <meta charset="UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>UI - Interfaz basada en el estado</title>
+</head>
+
+<body>
+
+ <h1>UI - Interfaz basada en el estado</h1>
+
+ <form id="todo-form">
+  <input type="text" id="todo-item" placeholder="Tarea por hacer">
+  <input type="submit" value="Agregar">
+ </form>
+ <h2>Lista de Tareas</h2>
+ <ul id="todo-list"></ul>
+
+ <script>
+
+  //El State
+  const state = {
+   todoList: []
+  }
+
+  //Template UI
+  const template = () => {
+   if (state.todoList.length < 1) return `<p><em>Lista vacía</em></p>`;
+   //Va a interactuar con la propiedad todoList (el arreglo) y por cada elemento que tenga me genera una <li>
+
+   let todos = state.todoList.map(item => `<li>${item}</li>`).join("") //con el método funcional map vamos a recorrer el todoList, y por cada item, nos retorne una <li> con el item dentro. Esto imprimiría el signo coma "," para evitarlo usamos el método .join("") para unirlos con espacio vacío. Agrupamos en la var todos
+
+   return todos;
+  }
+
+  //Render UI - Pinta en base a los cambios de estado
+  const render = () => {
+   console.log(state);
+   const $list = document.getElementById("todo-list");
+   if (!$list) return;
+   $list.innerHTML = template();
+  }
+
+
+  document.addEventListener("submit", e => {
+   if (!e.target.matches("#todo-form")) return false;
+   e.preventDefault();
+
+   const $item = document.getElementById("todo-item");
+   if (!$item) return;
+
+   //Actualizar el State y por ende la UI
+   state.todoList.push($item.value)
+   render()
+
+   //Limpiar input
+   $item.value = "";
+   $item.focus();
+  })
+
+  //la función render se ejecutará a la carga del DOM y cuando cambie el estado.
+  document.addEventListener("DOMContentLoaded", render)
+
+  document.getElementById("todo-item").autocomplete = "off";
+
+
+ </script>
+
+</body>
+
+</html>
